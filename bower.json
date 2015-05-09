@@ -1,0 +1,16 @@
+{
+  "name": "bloom-garden",
+  "version": "0.0.1",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "app/lib",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "webcomponentsjs": "~0.6.1",
+    "angular": "~1.3.15"
+  }
+}
