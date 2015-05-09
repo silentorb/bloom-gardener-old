@@ -1,11 +1,8 @@
 /// <reference path="bloom.ts"/>
-/// <reference path="../../../DefinitelyTyped/angularjs/angular.d.ts"/>
 var Garden = (function () {
     function Garden() {
-        this.vineyard_url = 'http://localhost:3000/';
     }
-    Garden.prototype.start = function () {
-        var _this = this;
+    Garden.start = function () {
         var $injector = angular.injector(['ng']);
         window['$q'] = $injector.get('$q');
         this.query({
@@ -21,36 +18,52 @@ var Garden = (function () {
         }).then(function (response) {
             var user = response.objects[0];
             if (user.username == 'anonymous') {
-                _this.goto('garden-login');
+                Garden.goto('garden-login');
+            }
+            else {
+                Garden.goto('garden-hub');
             }
         });
     };
-    Garden.prototype.goto = function (name) {
+    Garden.goto = function (name) {
         $('.current-page').remove();
         var new_page = $('<' + name + '/>');
         new_page.addClass('current-page');
         new_page.insertAfter($('header'));
     };
-    Garden.prototype.query = function (data) {
+    Garden.query = function (data) {
+        return Garden.post('vineyard/query', data);
+    };
+    Garden.post = function (path, data) {
+        return Garden.http('POST', path, data);
+    };
+    Garden.get = function (path) {
+        return Garden.http('GET', path);
+    };
+    Garden.http = function (method, path, data) {
+        if (data === void 0) { data = null; }
         var def = $q.defer();
         var options = {
-            method: 'POST',
+            method: method,
             contentType: 'application/json',
             crossDomain: true,
+            xhrFields: {
+                withCredentials: true
+            },
             data: JSON.stringify(data),
             dataType: 'json',
             success: function (response) {
                 def.resolve(response);
             }
         };
-        jQuery.ajax(this.vineyard_url + 'vineyard/query', options);
+        jQuery.ajax(this.vineyard_url + path, options);
         return def.promise;
     };
+    Garden.vineyard_url = 'http://localhost:3000/';
     return Garden;
 })();
 $(function () {
-    var garden = new Garden();
-    garden.start();
+    Garden.start();
 });
 Bloom.grow();
 //# sourceMappingURL=garden.js.map

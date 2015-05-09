@@ -22,6 +22,28 @@ main {
   justify-content: center;
   align-items: center;
 }
-form input[type=text] {
-  display: block;
+form {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
 }
+form input[type=text],
+form input[type=password],
+form button {
+  display: block;
+  font-size: 1em;
+  padding: 0.4em;
+  margin-bottom: 1em;
+  border-radius: 0.2em;
+}
+form .checkbox {
+  margin-bottom: 1em;
+}
+left-bar {
+  display: flex;
+  flex-direction: column;
+}
+left-bar > * {
+  padding: .3em .5em;
+}
+/*# sourceMappingURL=garden.css.map */

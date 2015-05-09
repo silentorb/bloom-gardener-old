@@ -1,7 +1,6 @@
-declare var $
+/// <reference path="../../../DefinitelyTyped/angularjs/angular.d.ts"/>
 
 module Bloom {
-  declare var jQuery
   declare var document
   //export function create_flower(name) {
   //  var content = document.querySelector('link[rel="import"]')['import']
@@ -37,7 +36,7 @@ module Bloom {
     document.registerElement('bloom-flower', {prototype: proto})
   }
 
-  export function flower(name, model, modules) {
+  export function flower(name, model) {
     //console.log('Registering custom flower: ' + name)
     var proto = Object.create(HTMLElement.prototype)
 

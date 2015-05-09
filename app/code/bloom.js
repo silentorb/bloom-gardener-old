@@ -1,3 +1,4 @@
+/// <reference path="../../../DefinitelyTyped/angularjs/angular.d.ts"/>
 var Bloom;
 (function (Bloom) {
     //export function create_flower(name) {
@@ -29,7 +30,7 @@ var Bloom;
         };
         document.registerElement('bloom-flower', { prototype: proto });
     }
-    function flower(name, model, modules) {
+    function flower(name, model) {
         //console.log('Registering custom flower: ' + name)
         var proto = Object.create(HTMLElement.prototype);
         proto.createdCallback = function () {

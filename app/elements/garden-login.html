@@ -2,8 +2,8 @@
   <template class="centered-content" style="width: 100%; height: 100%">
     <form ng-submit="on_submit()" class="form-signin">
       <h2>Log In</h2>
-      <input type="text" class="form-control" placeholder="Name" id="name" name="name" required/>
-      <input type="password" class="form-control" placeholder="Password" id="pass" name="pass" required/>
+      <input type="text" placeholder="Name" id="name" name="name" required/>
+      <input type="password" placeholder="Password" id="pass" name="pass" required/>
 
       <div class="checkbox">
         <label>
@@ -15,9 +15,5 @@
     </form>
   </template>
 
-  <script>Bloom.flower("garden-login", {
-    initialize: function () {
-      console.log('hey')
-    }
-  })</script>
+  <script src="garden-login.js"></script>
 </bloom-flower>

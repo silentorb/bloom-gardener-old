@@ -1,5 +1,4 @@
 /// <reference path="bloom.ts"/>
-/// <reference path="../../../DefinitelyTyped/angularjs/angular.d.ts"/>
 
 declare var $q
 
@@ -9,9 +8,10 @@ interface Query_Response {
 
 class Garden {
 
-  vineyard_url:string = 'http://localhost:3000/'
+  static vineyard_url:string = 'http://localhost:3000/'
+  static instance:Garden
 
-  start() {
+  static start() {
     var $injector = angular.injector(['ng'])
     window['$q'] = $injector.get('$q')
 
@@ -29,24 +29,42 @@ class Garden {
       .then((response) => {
         var user = response.objects[0]
         if (user.username == 'anonymous') {
-          this.goto('garden-login')
+          Garden.goto('garden-login')
+        }
+        else {
+          Garden.goto('garden-hub')
         }
       })
   }
 
-  goto(name) {
+  static goto(name) {
     $('.current-page').remove()
     var new_page = $('<'+ name + '/>')
     new_page.addClass('current-page')
     new_page.insertAfter($('header'))
   }
 
-  query(data):angular.IPromise<Query_Response> {
+  static query(data):angular.IPromise<Query_Response> {
+    return Garden.post('vineyard/query', data)
+  }
+
+  static post(path, data):angular.IPromise<Query_Response> {
+    return Garden.http('POST', path, data)
+  }
+
+  static get(path):angular.IPromise<Query_Response> {
+    return Garden.http('GET', path)
+  }
+
+  static http(method, path, data = null):angular.IPromise<Query_Response> {
     var def = $q.defer()
     var options = {
-      method: 'POST',
+      method: method,
       contentType: 'application/json',
       crossDomain: true,
+      xhrFields: {
+        withCredentials: true
+      },
       data: JSON.stringify(data),
       dataType: 'json',
       success: (response)=> {
@@ -54,15 +72,14 @@ class Garden {
       }
     }
 
-    jQuery.ajax(this.vineyard_url + 'vineyard/query', options)
+    jQuery.ajax(this.vineyard_url + path, options)
 
     return def.promise
   }
 }
 
 $(function () {
-  var garden = new Garden()
-  garden.start()
+  Garden.start()
 })
 
 Bloom.grow()
