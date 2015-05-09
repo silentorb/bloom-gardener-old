@@ -1,6 +1,27 @@
-body {
-  font-family: Trebuchet MS;
+.flex-container {
+  display: flex;
 }
-header .title {
+body {
+  display: flex;
+  font-family: Trebuchet MS;
+  flex-direction: column;
+  width: 100vw;
+  height: 100vh;
+  margin: 0;
+}
+header {
+  background-color: #a3e8a3;
+  padding: 0.5em;
   font-size: 2em;
+}
+main {
+  flex-grow: 1;
+}
+.centered-content {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+form input[type=text] {
+  display: block;
 }

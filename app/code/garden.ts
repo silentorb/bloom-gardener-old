@@ -29,15 +29,16 @@ class Garden {
       .then((response) => {
         var user = response.objects[0]
         if (user.username == 'anonymous') {
-          this.goto_login()
+          this.goto('garden-login')
         }
       })
   }
 
-  goto_login() {
-    var content = $('content')
-    content.empty()
-    content.append($('<garden-login/>'))
+  goto(name) {
+    $('.current-page').remove()
+    var new_page = $('<'+ name + '/>')
+    new_page.addClass('current-page')
+    new_page.insertAfter($('header'))
   }
 
   query(data):angular.IPromise<Query_Response> {

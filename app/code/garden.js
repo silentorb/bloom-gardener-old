@@ -21,14 +21,15 @@ var Garden = (function () {
         }).then(function (response) {
             var user = response.objects[0];
             if (user.username == 'anonymous') {
-                _this.goto_login();
+                _this.goto('garden-login');
             }
         });
     };
-    Garden.prototype.goto_login = function () {
-        var content = $('content');
-        content.empty();
-        content.append($('<garden-login/>'));
+    Garden.prototype.goto = function (name) {
+        $('.current-page').remove();
+        var new_page = $('<' + name + '/>');
+        new_page.addClass('current-page');
+        new_page.insertAfter($('header'));
     };
     Garden.prototype.query = function (data) {
         var def = $q.defer();

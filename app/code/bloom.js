@@ -35,6 +35,11 @@ var Bloom;
         proto.createdCallback = function () {
             var element_type = Bloom.elements[name];
             var template = document.importNode(element_type.template.content, true);
+            for (var j in element_type.template.attributes) {
+                var attr = element_type.template.attributes[j];
+                if (attr.value)
+                    this.setAttribute(attr.name, attr.value);
+            }
             var content = template.querySelector('content');
             if (content) {
                 var children = [], i;
