@@ -1,4 +1,4 @@
-/// <reference path="../code/garden.ts"/>
+/// <reference path="../code2/garden.ts"/>
 Bloom.flower("garden-login", {
     initialize: function () {
         var _this = this;

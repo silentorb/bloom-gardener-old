@@ -1,4 +1,4 @@
-/// <reference path="bloom.ts"/>
+/// <reference path="../code/bloom.ts"/>
 
 declare var $q
 
