@@ -1,5 +1,6 @@
-/// <reference path="../code2/garden.ts"/>
-Bloom.flower("garden-hub", {
+include "../code/garden.imp"
+
+bloom.flower("garden-hub", {
   initialize: function() {
     Garden.get('vineyard/schema')
       .then((response) => {

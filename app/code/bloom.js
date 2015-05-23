@@ -1,16 +1,16 @@
 /// <reference path="../../../DefinitelyTyped/angularjs/angular.d.ts"/>
-var Bloom;
-(function (Bloom) {
+var bloom;
+(function (bloom) {
     //export function create_flower(name) {
     //  var content = document.querySelector('link[rel="import"]')['import']
     //  var t:any = content.querySelector('#' + name)
     //  return $(document.importNode(t.content, true))
     //}
-    Bloom.elements = {};
+    bloom.elements = {};
     function grow() {
         register_element();
     }
-    Bloom.grow = grow;
+    bloom.grow = grow;
     function register_element() {
         var proto = Object.create(HTMLElement.prototype);
         proto.createdCallback = function () {
@@ -23,7 +23,7 @@ var Bloom;
                 if (node.nodeType == 8)
                     content.removeChild(node);
             }
-            Bloom.elements[name] = {
+            bloom.elements[name] = {
                 name: name,
                 template: template
             };
@@ -34,7 +34,7 @@ var Bloom;
         //console.log('Registering custom flower: ' + name)
         var proto = Object.create(HTMLElement.prototype);
         proto.createdCallback = function () {
-            var element_type = Bloom.elements[name];
+            var element_type = bloom.elements[name];
             var template = document.importNode(element_type.template.content, true);
             for (var j in element_type.template.attributes) {
                 var attr = element_type.template.attributes[j];
@@ -69,6 +69,6 @@ var Bloom;
         };
         document.registerElement(name, { prototype: proto });
     }
-    Bloom.flower = flower;
-})(Bloom || (Bloom = {}));
+    bloom.flower = flower;
+})(bloom || (bloom = {}));
 //# sourceMappingURL=bloom.js.map

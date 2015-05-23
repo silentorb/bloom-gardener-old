@@ -1,6 +1,6 @@
 /// <reference path="../../../DefinitelyTyped/angularjs/angular.d.ts"/>
 
-module Bloom {
+module bloom {
   declare var document
   //export function create_flower(name) {
   //  var content = document.querySelector('link[rel="import"]')['import']
@@ -41,7 +41,7 @@ module Bloom {
     var proto = Object.create(HTMLElement.prototype)
 
     proto.createdCallback = function () {
-      var element_type = Bloom.elements[name]
+      var element_type = bloom.elements[name]
       var template = document.importNode(element_type.template.content, true)
       for (var j in element_type.template.attributes) {
         var attr = element_type.template.attributes[j]

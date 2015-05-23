@@ -1,56 +1,5 @@
 include "browser.imp"
 
-namespace browser {
-	external class Window {
-		$q:Q
-	}
-	
-	external class Injector {
-		get(name:string)
-	}
-
-	external class Angular {
-		injector(name:string):Injector
-	}
-
-	external class Promise {
-		then(a):Promise
-	}
-
-	external class Element {
-		addClass()
-		insertAfter()
-		remove()
-	}
-
-	external class Q {
-		defer():Deferred
-	}
-
-	external class Deferred {
-		resolve()
-		reject()
-		promise:Promise		
-	}
-
-	external class Json {
-		stringify(input)
-		parse(input:string)
-	}
-
-	external class jQuery_Class {
-		ajax()
-	}
-}
-
-external var window:browser.Window
-external var angular:browser.Angular
-external var $q:browser.Q
-external var JSON:browser.Json
-external var jQuery:browser.jQuery_Class
-external $():browser.Element
-
-
 namespace bloom {
 
 	abstract class Response {
@@ -68,37 +17,37 @@ namespace bloom {
       var $injector = angular.injector(['ng'])
       window.$q = $injector.get('$q')
 
-	  query({
-		  "trellis": "user",
-		  "filters": [
-			{
-			  "path": "id",
-			  "value": "user",
-			  "type": "parameter"
-			}
-		  ],
-		  "version": "1.0.0.browser"
-		})
-		.then((response:bloom.Response)=> {
-			var user:User = response.objects.get(0)
-			if (user.username == 'anonymous') {
-				Garden.goto('garden-login')
-			}
-			else {
-				Garden.goto('garden-hub')
-			}
-		})
+      query({
+        "trellis": "user",
+        "filters": [
+        {
+          "path": "id",
+          "value": "user",
+          "type": "parameter"
+        }
+        ],
+        "version": "1.0.0.browser"
+      })
+      .then((response:bloom.Response)=> {
+        var user:User = response.objects.get(0)
+        if (user.username == 'anonymous') {
+          Garden.goto('garden-login')
+        }
+        else {
+          Garden.goto('garden-hub')
+        }
+      })
     }
 	
-	static goto(name) {
-		$('.current-page').remove()
-		var new_page = $('<' + name + '/>')
-		new_page.addClass('current-page')
-		new_page.insertAfter($('header'))
-	}
+    static goto(name) {
+      $('.current-page').remove()
+      var new_page = $('<' + name + '/>')
+      new_page.addClass('current-page')
+      new_page.insertAfter($('header'))
+    }
 
 	  static query(data):browser.Promise {
-		return Garden.post('vineyard/query', data)
+		  return Garden.post('vineyard/query', data)
 	  }
 	  
   static post(path, data) {
