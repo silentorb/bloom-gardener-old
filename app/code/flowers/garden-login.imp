@@ -1,0 +1,17 @@
+bloom {
+  Garden_Login : Flower {
+    initialize() {
+      element.find('form').submit((e)=> {
+        e.preventDefault()
+        var data = {
+          name: element.find('#name').val(),
+          pass: element.find('#pass').val()
+        }
+        Garden.post('vineyard/login', data)
+        .then((response)=> {
+            Garden.goto('garden-hub')
+          })
+      })
+    }
+  }
+}

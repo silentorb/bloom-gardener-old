@@ -1,0 +1,21 @@
+
+bloom {
+  Garden_Hub {
+    initialize() {
+      Garden.get('vineyard/schema')
+        .then((response:Response) => {
+          var objects = response.objects
+          var list = $('left-bar')
+          list.empty()
+          for (var name in objects) {
+            var trellis = objects.get(name)
+            var link = $('<a href="' + '">'+ name + '</a>')
+            link.click((e:browser.Event)=> {
+              e.preventDefault()
+            })
+            list.append(link)
+          }
+        })
+    }
+  }
+}

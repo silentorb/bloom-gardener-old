@@ -1,4 +1,10 @@
-var bloom = {}
+window.bloom = window.bloom || {}
+
+bloom.Flower = function() {}
+bloom.Flower.prototype = {
+	element,
+	initialize: 
+}window.bloom = window.bloom || {}
 
 bloom.Garden = function() {}
 bloom.Garden.vineyard_url = 'http://localhost:3000/'
@@ -59,4 +65,32 @@ bloom.Garden.http = function(method, path, data) {
 	}
 	jQuery.ajax(bloom.Garden.vineyard_url + path, options)
 	return def.promise
+}
+window.bloom = window.bloom || {}
+
+bloom.Garden_Hub = function() {}
+bloom.Garden_Hub.prototype = {
+initialize: function() {
+		bloom.Garden_Hub.get('vineyard/schema').then(function(response) {
+			var objects = response.objects
+			var list = $('left-bar')
+			list.empty()
+			for (::const_iterator it = objects.begin(); it != objects.end(); it++) {
+				var name = *it
+				var trellis = objects[name]
+				var link = $('<a href="' + '">' + name + '</a>')
+				link.click(function(e) {
+					e.preventDefault()
+				})
+				list.append(link)
+}
+		})
+	}
+}window.bloom = window.bloom || {}
+
+bloom.Garden_Login = function() {}
+bloom.Garden_Login.prototype = {
+initialize: function() {
+		this
+	}
 }

@@ -1,0 +1,59 @@
+
+browser {
+	external Window {
+		$q:Q
+	}
+
+	external Injector {
+		get(name:string)
+	}
+
+	external Angular {
+		injector(name:string):Injector
+	}
+
+	external Promise {
+		then(a):Promise
+	}
+
+	external Element {
+		addClass()
+		append(child:Element)
+		click(e:Event)
+		empty()
+		find():Element
+		insertAfter()
+		remove()
+		submit()
+	}
+
+	external Event {
+    preventDefault()
+	}
+
+	external Q {
+		defer():Deferred
+	}
+
+	external Deferred {
+		resolve()
+		reject()
+		promise:Promise
+	}
+
+	external Json {
+		stringify(input)
+		parse(input:string)
+	}
+
+	external jQuery_Class {
+		ajax()
+	}
+}
+
+external window:browser.Window
+external angular:browser.Angular
+external $q:browser.Q
+external JSON:browser.Json
+external jQuery:browser.jQuery_Class
+external $():browser.Element
