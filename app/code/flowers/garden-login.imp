@@ -1,7 +1,7 @@
 bloom {
   Garden_Login : Flower {
     initialize() {
-      element.find('form').submit((e)=> {
+      element.find('form').submit((e:browser.Event)=> {
         e.preventDefault()
         var data = {
           name: element.find('#name').val(),

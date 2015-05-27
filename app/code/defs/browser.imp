@@ -25,6 +25,7 @@ browser {
 		insertAfter()
 		remove()
 		submit()
+		val()
 	}
 
 	external Event {
