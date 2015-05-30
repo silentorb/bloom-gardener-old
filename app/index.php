@@ -4,8 +4,10 @@
   <meta charset="UTF-8">
   <title>Garden</title>
 
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+  <script src="lib/jquery/dist/jquery.min.js"></script>
   <script src="lib/webcomponentsjs/webcomponents-lite.min.js"></script>
+
+  <!--Loading Angular just for its promises; one of the few implementations that don't need require.js-->
   <script src="lib/angular/angular.js"></script>
 
   <script src="code/bloom.js"></script>
@@ -13,13 +15,11 @@
 
   <link rel="stylesheet" href="styles/garden.css">
 
-  <link rel="import" href="elements/garden-login.html">
-  <link rel="import" href="elements/garden-hub.html">
-
 </head>
 <body>
   <header>Garden</header>
   <footer></footer>
+  <?php echo file_get_contents('code/flowers/templates.html'); ?>
 </body>
 <script>
   bloom.Garden.start()

@@ -1,6 +1,8 @@
 
 bloom {
-  Garden_Hub {
+  Garden_Hub : Flower {
+    template = 'garden-hub'
+
     initialize() {
       Garden.get('vineyard/schema')
         .then((response:Response) => {

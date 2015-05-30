@@ -1,5 +1,5 @@
-<template name="garden-login" class="centered-content" style="width: 100%; height: 100%">
-  <form ng-submit="on_submit()" class="form-signin">
+<template id="garden-login">
+  <form class="centered-content form-signin" style="width: 100%; height: 100%">
     <h2>Log In</h2>
     <input type="text" placeholder="Name" id="name" name="name" required/>
     <input type="password" placeholder="Password" id="pass" name="pass" required/>
@@ -13,3 +13,11 @@
 
   </form>
 </template>
+
+<template id="garden-hub">
+  <left-bar>
+
+  </left-bar>
+  <content></content>
+</template>
+

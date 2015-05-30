@@ -1,8 +1,16 @@
 bloom {
 
   Flower {
-    initialize()
+    template:string
     element:browser.Element
+
+    constructor() {
+      var temp = document.querySelector('#' + template)
+      element = $(document.importNode(temp.content.childNodes.get(1), true))
+    }
+
+    initialize()
+
   }
 
 	abstract Response {
@@ -34,19 +42,18 @@ bloom {
       .then((response:Response)=> {
         var user:User = response.objects.get(0)
         if (user.username == 'anonymous') {
-          Garden.goto('garden-login')
+          Garden.goto(new Garden_Login())
         }
         else {
-          Garden.goto('garden-hub')
+          Garden.goto(new Garden_Hub())
         }
       })
     }
 	
-    static goto(name) {
+    static goto(flower:Flower) {
       $('.current-page').remove()
-      var new_page = $('<' + name + '/>')
-      new_page.addClass('current-page')
-      new_page.insertAfter($('header'))
+      flower.element.insertAfter($('header'))
+      flower.initialize()
     }
 
 	  static query(data):browser.Promise {

@@ -1,9 +1,12 @@
 window.bloom = window.bloom || {}
-bloom.Flower = function() {}
-bloom.Flower.prototype = {
-	element: null
+bloom.Flower = function() {
+	var temp = document.querySelector('#' + this.template)
+	this.element = $(document.importNode(temp.content.childNodes[1], true))
 }
-window.bloom = window.bloom || {}
+bloom.Flower.prototype = {}
+bloom.Flower.prototype.template = ''
+bloom.Flower.prototype.element = null
+
 bloom.Garden = function() {}
 bloom.Garden.vineyard_url = 'http://localhost:3000/'
 bloom.Garden.start = function() {
@@ -22,17 +25,16 @@ bloom.Garden.start = function() {
 	}).then(function(response) {
 		var user = response.objects[0]
 		if (user.username == 'anonymous')
-			bloom.Garden.goto('garden-login')
+			bloom.Garden.goto(new bloom.Garden_Login())
 		else
-			bloom.Garden.goto('garden-hub')
+			bloom.Garden.goto(new bloom.Garden_Hub())
 
 	})
 }
-bloom.Garden.goto = function(name) {
+bloom.Garden.goto = function(flower) {
 	$('.current-page').remove()
-	var new_page = $('<' + name + '/>')
-	new_page.addClass('current-page')
-	new_page.insertAfter($('header'))
+	flower.element.insertAfter($('header'))
+	flower.initialize()
 }
 bloom.Garden.query = function(data) {
 	return bloom.Garden.post('vineyard/query', data)
@@ -64,38 +66,43 @@ bloom.Garden.http = function(method, path, data) {
 	jQuery.ajax(bloom.Garden.vineyard_url + path, options)
 	return def.promise
 }
-window.bloom = window.bloom || {}
-bloom.Garden_Hub = function() {}
-bloom.Garden_Hub.prototype = {
-initialize: function() {
-		bloom.Garden_Hub.get('vineyard/schema').then(function(response) {
-			var objects = response.objects
-			var list = $('left-bar')
-			list.empty()
-			for (var name in objects) {
-				var trellis = objects[name]
-				var link = $('<a href="' + '">' + name + '</a>')
-				link.click(function(e) {
-					e.preventDefault()
-				})
-				list.append(link)
+bloom.Garden_Hub = function() {
+	bloom.Flower.apply(this)
 }
-		})
-	}
-}
-window.bloom = window.bloom || {}
-bloom.Garden_Login = function() {}
-bloom.Garden_Login.prototype = {
-initialize: function() {
-		this.element.find('form').submit(function(e) {
-			e.preventDefault()
-			var data = {
-				name: this.element.find('#name').val(),
-				pass: this.element.find('#pass').val()
-			}
-			bloom.Garden_Login.post('vineyard/login', data).then(function(response) {
-				bloom.Garden_Login.goto('garden-hub')
+bloom.Garden_Hub.prototype = Object.create(bloom.Flower.prototype)
+bloom.Garden_Hub.prototype.template = 'garden-hub'
+bloom.Garden_Hub.prototype.initialize = function() {
+	bloom.Garden.get('vineyard/schema').then(function(response) {
+		var objects = response.objects
+		var list = $('left-bar')
+		list.empty()
+		for (var name in objects) {
+			var trellis = objects[name]
+			var link = $('<a href="' + '">' + name + '</a>')
+			link.click(function(e) {
+				e.preventDefault()
 			})
-		})
-	}
+			list.append(link)
 }
+	})
+}
+
+bloom.Garden_Login = function() {
+	bloom.Flower.apply(this)
+}
+bloom.Garden_Login.prototype = Object.create(bloom.Flower.prototype)
+bloom.Garden_Login.prototype.template = 'garden-login'
+bloom.Garden_Login.prototype.initialize = function() {
+	var self = this
+	this.element.submit(function(e) {
+		e.preventDefault()
+		var data = {
+			name: self.element.find('#name').val(),
+			pass: self.element.find('#pass').val()
+		}
+		bloom.Garden.post('vineyard/login', data).then(function(response) {
+			bloom.Garden.goto('garden-hub')
+		})
+	})
+}
+

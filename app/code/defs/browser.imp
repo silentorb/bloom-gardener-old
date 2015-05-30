@@ -1,7 +1,17 @@
 
-browser {
+external browser {
 	external Window {
 		$q:Q
+	}
+
+	external Node {
+	  content:Node
+	  childNodes:Node[]
+	}
+
+	external Document {
+	  querySelector(pattern:string):Node
+	  importNode(source, deep:bool)
 	}
 
 	external Injector {
@@ -53,6 +63,7 @@ browser {
 }
 
 external window:browser.Window
+external document:browser.Document
 external angular:browser.Angular
 external $q:browser.Q
 external JSON:browser.Json

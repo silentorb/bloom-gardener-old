@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+  <meta charset="UTF-8">
+  <title></title>
+</head>
+<body>
+<script>
+  var A = function() {}
+  A.prototype.value = 1
+
+  var B = function() {}
+  B.prototype = new A()
+  B.prototype.value = 2
+
+  var C = function() {}
+  C.prototype = new A()
+  C.prototype.value = 3
+
+  console.log('A', new A().value)
+  console.log('B', new B().value)
+  console.log('C', new C().value)
+
+</script>
+</body>
+</html>
