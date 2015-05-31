@@ -3,6 +3,8 @@
 <head lang="en">
   <meta charset="UTF-8">
   <title></title>
+  <script src="code2/test.js"></script>
+
 </head>
 <body>
 
@@ -12,16 +14,19 @@
   var Data =
   <?php echo file_get_contents('map.js.map'); ?>
 
+  function convert(x) {
+    return x ^ 15 >> 1
+  }
   var mappings = Data.mappings
     .split(/;/g)
     .map(function (x) {
       return x.split(/,/g)
-//        .map(function (m) {
-//          return m.split('')
-//            .map(function (m) {
-//              return atob(m)
-//            })
-//        })
+        .map(function (m) {
+          return m.split('')
+            .map(function (m) {
+              return convert(m)
+            })
+        })
 //        .join('')
 
     })

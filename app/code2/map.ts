@@ -1,2 +1,5 @@
-var x
-var x
+var x = 1
+
+{
+  var y;
+}
