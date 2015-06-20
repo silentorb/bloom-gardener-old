@@ -1,0 +1,2 @@
+-i E:\Websites\garden\app\code -o E:\Websites\garden\app\code\app.js -t js
+-i E:\Websites\garden\app\test -o E:\Websites\garden\app\test\test.js -t js
