@@ -1,8 +1,0 @@
-testing {
-  Test {
-
-    run() {
-      var x = 1
-    }
-  }
-}

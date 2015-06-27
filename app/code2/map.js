@@ -1,5 +1,6 @@
-var x = 1;
-{
+var x = 2;
+
+ {
     var y;
 }
 //# sourceMappingURL=map.js.map

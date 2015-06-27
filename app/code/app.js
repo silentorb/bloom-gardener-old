@@ -1,11 +1,11 @@
 window.bloom = window.bloom || {}
 bloom.Flower = function() {
-  var temp = document.querySelector('#' + this.imperative.render.artisan.Stroke_Token)
-  this.imperative.render.artisan.Stroke_Token = $(document.importNode(temp.content.childNodes[1], true))
+  var temp = document.querySelector('#' + this.template)
+  this.element = $(document.importNode(temp.content.childNodes[1], true))
 }
 bloom.Flower.prototype = {}
-bloom.Flower.prototype.template = imperative.render.artisan.Stroke_Token
-bloom.Flower.prototype.element = imperative.render.artisan.Stroke_Token
+bloom.Flower.prototype.template = ''
+bloom.Flower.prototype.element = null
 bloom.Garden = function() {}
 bloom.Garden.vineyard_url = 'http://localhost:3000/'
 bloom.Garden.start = function() {
@@ -24,9 +24,9 @@ bloom.Garden.start = function() {
   }).then(function(response) {
     var user = response.objects[0]
     if (user.username == 'anonymous')
-      bloom.Garden.goto(new imperative.render.artisan.Stroke_List())
+      bloom.Garden.goto(new bloom.Garden_Login())
     else
-      bloom.Garden.goto(new imperative.render.artisan.Stroke_List())
+      bloom.Garden.goto(new bloom.Garden_Hub())
   })
 }
 bloom.Garden.goto = function(flower) {
@@ -64,15 +64,15 @@ bloom.Garden.http = function(method, path, data) {
   jQuery.ajax(bloom.Garden.vineyard_url + path, options)
   return def.promise
 }
-bloom.Garden_Hub = function() {bloom.Flower.apply(this)
+bloom.Garden_Hub = function() {bloom.Flower.apply(this)}
 bloom.Garden_Hub.prototype = Object.create(bloom.Flower.prototype)
-bloom.Garden_Hub.prototype.template = imperative.render.artisan.Stroke_Token
+bloom.Garden_Hub.prototype.template = 'garden-hub'
 bloom.Garden_Hub.prototype.initialize = function() {
   bloom.Garden.get('vineyard/schema').then(function(response) {
     var objects = response.objects
     var list = $('left-bar')
     list.empty()
-    for (imperative.render.artisan.Stroke_Token) {
+    for (var name in objects) {
       var trellis = objects[name]
       var link = $('<a href="' + '">' + name + '</a>')
       link.click(function(e) {
@@ -82,16 +82,16 @@ bloom.Garden_Hub.prototype.initialize = function() {
     }
   })
 }
-bloom.Garden_Login = function() {bloom.Flower.apply(this)
+bloom.Garden_Login = function() {bloom.Flower.apply(this)}
 bloom.Garden_Login.prototype = Object.create(bloom.Flower.prototype)
-bloom.Garden_Login.prototype.template = imperative.render.artisan.Stroke_Token
+bloom.Garden_Login.prototype.template = 'garden-login'
 bloom.Garden_Login.prototype.initialize = function() {
   var self = this
-  this.imperative.render.artisan.Stroke_Token.submit(function(e) {
+  this.element.submit(function(e) {
     e.preventDefault()
     var data = {
-      name: self.imperative.render.artisan.Stroke_Token.find('#name').val(),
-      pass: self.imperative.render.artisan.Stroke_Token.find('#pass').val()
+      name: self.element.find('#name').val(),
+      pass: self.element.find('#pass').val()
     }
     bloom.Garden.post('vineyard/login', data).then(function(response) {
       bloom.Garden.goto('garden-hub')
