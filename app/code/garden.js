@@ -3,8 +3,6 @@ var Garden = (function () {
     function Garden() {
     }
     Garden.start = function () {
-        var $injector = angular.injector(['ng']);
-        window['$q'] = $injector.get('$q');
         this.query({
             "trellis": "user",
             "filters": [
@@ -15,7 +13,8 @@ var Garden = (function () {
                 }
             ],
             "version": "1.0.0.browser"
-        }).then(function (response) {
+        })
+            .then(function (response) {
             var user = response.objects[0];
             if (user.username == 'anonymous') {
                 Garden.goto('garden-login');
@@ -26,13 +25,13 @@ var Garden = (function () {
         });
     };
     Garden.goto = function (name) {
-        $('.current-page').remove();
-        var new_page = $('<' + name + '/>');
-        new_page.addClass('current-page');
-        new_page.insertAfter($('header'));
+        Bloom.remove(document.querySelector('.current-page'));
+        var new_page = document.querySelector('<' + name + '/>');
+        new_page.classList.add('current-page');
+        Bloom.insert_after(document.querySelector('header'), new_page);
     };
     Garden.query = function (data) {
-        return Garden.post('vineyard/query', data);
+        return Garden.post(this.vineyard_url + 'vineyard/query', data);
     };
     Garden.post = function (path, data) {
         return Garden.http('POST', path, data);
@@ -42,28 +41,38 @@ var Garden = (function () {
     };
     Garden.http = function (method, path, data) {
         if (data === void 0) { data = null; }
-        var def = $q.defer();
-        var options = {
-            method: method,
-            contentType: 'application/json',
-            crossDomain: true,
-            xhrFields: {
-                withCredentials: true
-            },
-            data: JSON.stringify(data),
-            dataType: 'json',
-            success: function (response) {
-                def.resolve(response);
-            }
-        };
-        jQuery.ajax(this.vineyard_url + path, options);
-        return def.promise;
+        return new Promise(function (resolve, reject) {
+            var request = new XMLHttpRequest();
+            request.open(method, path, true);
+            if (data)
+                request.setRequestHeader('Content-Type', 'application/json');
+            request.onload = function () {
+                if (request.status >= 200 && request.status < 400) {
+                    resolve({
+                        status: request,
+                        data: request.responseText
+                    });
+                }
+                else {
+                    reject(request);
+                }
+            };
+            request.onerror = function (error) {
+                reject(error);
+            };
+            request.send(JSON.stringify(data));
+        });
     };
     Garden.vineyard_url = 'http://localhost:3000/';
     return Garden;
 })();
-$(function () {
-    Garden.start();
+document.addEventListener('DOMContentLoaded', function () {
+    //Garden.start()
+    Garden.get('elements/elements.html')
+        .then(function (response) {
+        var parser = new DOMParser();
+        var lib = parser.parseFromString(response.data, "text/html");
+        console.log(response);
+    });
 });
-Bloom.grow();
 //# sourceMappingURL=garden.js.map

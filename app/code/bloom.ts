@@ -1,85 +1,52 @@
-/// <reference path="../../../DefinitelyTyped/angularjs/angular.d.ts"/>
+/// <reference path="../../defs/es6-promise.d.ts"/>
 
 module Bloom {
   declare var document
-  //export function create_flower(name) {
-  //  var content = document.querySelector('link[rel="import"]')['import']
-  //  var t:any = content.querySelector('#' + name)
-  //  return $(document.importNode(t.content, true))
+
+  var definitions:{ [id: string]: Flower_Definition; }
+
+  export function remove(node) {
+    node.parentNode.removeChild(node)
+  }
+
+  export function insert_after(first, second) {
+    first.parentNode.insertBefore(second, first.nextSibling);
+  }
+
+  export function create_from_string(input) {
+    var div = document.createElement('div')
+    div.innerHTML = input
+    return div.childNodes
+  }
+
+  export function initialize_function() {
+    
+  }
+
+  //export function create(name, attributes = undefined, children = undefined) {
+  //  var result = document.createElement(name)
+  //  if (attributes) {
+  //    for (var i = 0; i < attributes.length; ++i) {
+  //      result.setAttribute(i, attributes[i])
+  //    }
+  //  }
+  //
+  //  if (children) {
+  //    for (var i = 0; i < children.length; ++i) {
+  //      result.appendChild(children[i])
+  //    }
+  //  }
   //}
-  export var elements = {}
 
-  export function grow() {
-    register_element()
+  export function flower(data) {
+
   }
 
-  function register_element() {
-    var proto = Object.create(HTMLElement.prototype)
-
-    proto.createdCallback = function () {
-      var name = this.attributes.name.value
-      var template = this.querySelector('template')
-      var content = template.content
-      var children = content.childNodes
-      for (var i = children.length - 1; i >= 0; --i) {
-        var node = children[i]
-        if (node.nodeType == 8)
-          content.removeChild(node)
-      }
-
-      elements[name] = {
-        name: name,
-        template: template
-      }
-    }
-
-    document.registerElement('bloom-flower', {prototype: proto})
+  export interface Flower_Definition {
+    children:Flower_Definition[]
   }
 
-  export function flower(name, model) {
-    //console.log('Registering custom flower: ' + name)
-    var proto = Object.create(HTMLElement.prototype)
-
-    proto.createdCallback = function () {
-      var element_type = Bloom.elements[name]
-      var template = document.importNode(element_type.template.content, true)
-      for (var j in element_type.template.attributes) {
-        var attr = element_type.template.attributes[j]
-        if (attr.value)
-          this.setAttribute(attr.name, attr.value)
-      }
-      var content = template.querySelector('content')
-      if (content) {
-        var children = [], i
-        for (i = this.children.length - 1; i >= 0; --i) {
-          children.push(this.removeChild(this.children[i]))
-        }
-
-        this.appendChild(template)
-        var parent = content.parentNode
-        for (i = 0; i < children.length; ++i) {
-          parent.insertBefore(children[i], content)
-        }
-
-        parent.removeChild(content)
-      }
-      else {
-        if (this.childNodes.length > 0)
-          this.insertBefore(template, this.firstChild)
-        else
-          this.appendChild(template)
-      }
-
-      this.setAttribute('ng-non-bindable', '')
-    }
-
-    proto.attachedCallback = function () {
-      model.element = $(this)
-      if (model.initialize)
-        model.initialize()
-    }
-
-    document.registerElement(name, {prototype: proto})
+  export interface Flower {
+    children:Flower[]
   }
-
 }

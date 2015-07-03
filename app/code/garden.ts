@@ -1,20 +1,14 @@
 /// <reference path="bloom.ts"/>
 
-declare var $q
-
 interface Query_Response {
   objects: any[]
 }
 
 class Garden {
-
   static vineyard_url:string = 'http://localhost:3000/'
   static instance:Garden
 
   static start() {
-    var $injector = angular.injector(['ng'])
-    window['$q'] = $injector.get('$q')
-
     this.query({
       "trellis": "user",
       "filters": [
@@ -38,48 +32,57 @@ class Garden {
   }
 
   static goto(name) {
-    $('.current-page').remove()
-    var new_page = $('<'+ name + '/>')
-    new_page.addClass('current-page')
-    new_page.insertAfter($('header'))
+    Bloom.remove(document.querySelector('.current-page'))
+    var new_page = document.querySelector('<' + name + '/>')
+    new_page.classList.add('current-page')
+    Bloom.insert_after(document.querySelector('header'), new_page)
   }
 
-  static query(data):angular.IPromise<Query_Response> {
-    return Garden.post('vineyard/query', data)
+  static query(data):Promise<Query_Response> {
+    return Garden.post(this.vineyard_url + 'vineyard/query', data)
   }
 
-  static post(path, data):angular.IPromise<Query_Response> {
+  static post(path, data):Promise<any> {
     return Garden.http('POST', path, data)
   }
 
-  static get(path):angular.IPromise<Query_Response> {
+  static get(path):Promise<any> {
     return Garden.http('GET', path)
   }
 
-  static http(method, path, data = null):angular.IPromise<Query_Response> {
-    var def = $q.defer()
-    var options = {
-      method: method,
-      contentType: 'application/json',
-      crossDomain: true,
-      xhrFields: {
-        withCredentials: true
-      },
-      data: JSON.stringify(data),
-      dataType: 'json',
-      success: (response)=> {
-        def.resolve(response)
+  static http(method, path, data = null):Promise<any> {
+    return new Promise((resolve, reject)=> {
+      var request = new XMLHttpRequest()
+      request.open(method, path, true)
+      if (data)
+        request.setRequestHeader('Content-Type', 'application/json');
+
+      request.onload = function () {
+        if (request.status >= 200 && request.status < 400) {
+          resolve({
+            status: request,
+            data: request.responseText
+          })
+        } else {
+          reject(request)
+        }
       }
-    }
 
-    jQuery.ajax(this.vineyard_url + path, options)
+      request.onerror = function (error) {
+        reject(error)
+      }
 
-    return def.promise
+      request.send(JSON.stringify(data))
+    })
   }
 }
 
-$(function () {
-  Garden.start()
+document.addEventListener('DOMContentLoaded', function () {
+  //Garden.start()
+  Garden.get('elements/elements.html')
+  .then((response) => {
+      var parser = new DOMParser()
+      var lib = parser.parseFromString(response.data, "text/html")
+      console.log(response)
+    })
 })
-
-Bloom.grow()
