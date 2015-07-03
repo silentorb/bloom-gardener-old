@@ -3,50 +3,41 @@
 module Bloom {
   declare var document
 
-  var definitions:{ [id: string]: Flower_Definition; }
+  var bulbs:{ [id: string]: Bulb; } = {}
 
-  export function remove(node) {
-    node.parentNode.removeChild(node)
-  }
-
-  export function insert_after(first, second) {
-    first.parentNode.insertBefore(second, first.nextSibling);
-  }
-
-  export function create_from_string(input) {
-    var div = document.createElement('div')
-    div.innerHTML = input
-    return div.childNodes
-  }
-
-  export function initialize_function() {
-    
-  }
-
-  //export function create(name, attributes = undefined, children = undefined) {
-  //  var result = document.createElement(name)
-  //  if (attributes) {
-  //    for (var i = 0; i < attributes.length; ++i) {
-  //      result.setAttribute(i, attributes[i])
-  //    }
-  //  }
-  //
-  //  if (children) {
-  //    for (var i = 0; i < children.length; ++i) {
-  //      result.appendChild(children[i])
-  //    }
-  //  }
-  //}
-
-  export function flower(data) {
-
-  }
-
-  export interface Flower_Definition {
-    children:Flower_Definition[]
+  export interface Bulb {
+    name:string
+    children:Bulb[]
+    instantiate:{(args?): Flower}
   }
 
   export interface Flower {
+    element:HTMLElement
     children:Flower[]
+  }
+
+  export function initialize_function() {
+
+  }
+
+  export function create_flower(bulb_name:string, args = null) {
+    var bulb = bulbs[bulb_name]
+    if (!bulb)
+      throw new Error('Could not find bulb ' + bulb_name + '.')
+
+    if (typeof bulb.instantiate != 'function')
+      throw new Error('Bulb ' + bulb_name + ' is static and cannot be instantiated.')
+
+    return bulb.instantiate(args)
+  }
+
+  export function add_bulb(bulb:Bulb) {
+    bulbs[bulb.name] = bulb
+  }
+
+  export function add_bulbs(bulbs:Bulb[]) {
+    for (var i in bulbs) {
+      add_bulb(bulbs[i])
+    }
   }
 }

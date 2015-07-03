@@ -1,40 +1,28 @@
-/// <reference path="../../defs/es6-promise.d.ts"/>
 var Bloom;
 (function (Bloom) {
-    var definitions;
-    function remove(node) {
-        node.parentNode.removeChild(node);
-    }
-    Bloom.remove = remove;
-    function insert_after(first, second) {
-        first.parentNode.insertBefore(second, first.nextSibling);
-    }
-    Bloom.insert_after = insert_after;
-    function create_from_string(input) {
-        var div = document.createElement('div');
-        div.innerHTML = input;
-        return div.childNodes;
-    }
-    Bloom.create_from_string = create_from_string;
+    var bulbs = {};
     function initialize_function() {
     }
     Bloom.initialize_function = initialize_function;
-    //export function create(name, attributes = undefined, children = undefined) {
-    //  var result = document.createElement(name)
-    //  if (attributes) {
-    //    for (var i = 0; i < attributes.length; ++i) {
-    //      result.setAttribute(i, attributes[i])
-    //    }
-    //  }
-    //
-    //  if (children) {
-    //    for (var i = 0; i < children.length; ++i) {
-    //      result.appendChild(children[i])
-    //    }
-    //  }
-    //}
-    function flower(data) {
+    function create_flower(bulb_name, args) {
+        if (args === void 0) { args = null; }
+        var bulb = bulbs[bulb_name];
+        if (!bulb)
+            throw new Error('Could not find bulb ' + bulb_name + '.');
+        if (typeof bulb.instantiate != 'function')
+            throw new Error('Bulb ' + bulb_name + ' is static and cannot be instantiated.');
+        return bulb.instantiate(args);
     }
-    Bloom.flower = flower;
+    Bloom.create_flower = create_flower;
+    function add_bulb(bulb) {
+        bulbs[bulb.name] = bulb;
+    }
+    Bloom.add_bulb = add_bulb;
+    function add_bulbs(bulbs) {
+        for (var i in bulbs) {
+            add_bulb(bulbs[i]);
+        }
+    }
+    Bloom.add_bulbs = add_bulbs;
 })(Bloom || (Bloom = {}));
 //# sourceMappingURL=bloom.js.map
