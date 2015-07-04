@@ -1,8 +1,11 @@
+/// <reference path="bloom.ts"/>
+/// <reference path="wind.ts"/>
 var Bulb_Loader;
 (function (Bulb_Loader) {
     var templates = {};
     function load_templates(url) {
-        return Wind.get(url).then(function (response) {
+        return Wind.get(url)
+            .then(function (response) {
             var parser = new DOMParser();
             var lib = parser.parseFromString(response.data, "text/html");
             var additions = lib.children[0].children[1].children;

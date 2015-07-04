@@ -1,3 +1,4 @@
+/// <reference path="../../defs/es6-promise.d.ts"/>
 var Bloom;
 (function (Bloom) {
     var bulbs = {};

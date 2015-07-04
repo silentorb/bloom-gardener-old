@@ -1,10 +1,12 @@
+/// <reference path="../../defs/es6-promise.d.ts"/>
 var Wind;
 (function (Wind) {
     Wind.vineyard_url = 'http://localhost:3000/';
     var vineyard;
     (function (vineyard) {
         function query(data) {
-            return json('POST', Wind.vineyard_url + 'vineyard/query', data).then(function (response) { return response.data; });
+            return json('POST', Wind.vineyard_url + 'vineyard/query', data)
+                .then(function (response) { return response.data; });
         }
         vineyard.query = query;
         function post(path, data) {
@@ -26,7 +28,8 @@ var Wind;
     Wind.get = get;
     function json(method, path, data) {
         if (data === void 0) { data = null; }
-        return http(method, path, data).then(function (response) {
+        return http(method, path, data)
+            .then(function (response) {
             response.data = JSON.parse(response.data);
             return response;
         });

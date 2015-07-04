@@ -1,3 +1,7 @@
+/// <reference path="bloom.ts"/>
+/// <reference path="spade.ts"/>
+/// <reference path="bulb_loader.ts"/>
+/// <reference path="graft.ts"/>
 var Garden;
 (function (Garden) {
     var change_page;
@@ -14,7 +18,8 @@ var Garden;
                 }
             ],
             "version": "1.0.0.browser"
-        }).then(function (response) {
+        })
+            .then(function (response) {
             var user = response.objects[0];
             if (user.username == 'anonymous') {
                 goto('garden-login');
@@ -32,7 +37,8 @@ var Garden;
     Garden.goto = goto;
 })(Garden || (Garden = {}));
 document.addEventListener('DOMContentLoaded', function () {
-    Bulb_Loader.load_templates('elements/elements.html').then(function () {
+    Bulb_Loader.load_templates('elements/elements.html')
+        .then(function () {
         Garden.start();
     });
 });

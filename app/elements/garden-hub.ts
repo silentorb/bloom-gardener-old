@@ -17,9 +17,8 @@ Bloom.add_bulb(Bulb_Loader.create_bulb({
     Wind.vineyard.get('vineyard/schema')
       .then(function (response) {
         console.log(response)
-        var objects = response.data.objects || response.data.trellises
+        var trellises = response.data.objects.sort(Graft.sort('name'))
         var list = elements.left_bar
-        var trellises = cleanup_trellis_list(objects)
 
         Graft.bind_list_to_element(list, trellises, function (item, name) {
           var link = Bloom.create_flower('trellis-link', {
@@ -49,7 +48,7 @@ Bloom.add_bulb(Bulb_Loader.create_bulb({
       "version": "1.0.0.browser"
     })
       .then((response) => {
-        Graft.bind_list_to_element(elements.list, response.objects, function (item, name) {
+        Graft.bind_list_to_element(elements.list,  response.objects, function (item, name) {
           var link = Bloom.create_flower('entity-row', {
             seed: item,
             trellis: trellis
@@ -70,19 +69,8 @@ Bloom.add_bulb(Bulb_Loader.create_bulb({
   }
 }))
 
-function cleanup_trellis_list(trellises) {
-  var result = []
-  for (var i in trellises) {
-    var trellis = trellises[i]
-    trellis.name = i
-    result.push(trellis)
-  }
-  result.sort(function (a, b) {
-    if (a.name == b.name)
-      return 0
-
-    return a.name < b.name ? -1 : 1
-  })
-
-  return result
+function prepare_trellis(trellis) {
+  trellis.primary_key = trellis.primary_key || 'id'
+  trellis.is_virtual = trellis.is_virtual || false
+  return trellis
 }

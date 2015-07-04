@@ -38,4 +38,13 @@ module Graft {
 
     return new_item
   }
+
+  export function sort(key) {
+    return function (a, b) {
+      if (a[key] == b[key])
+        return 0
+
+      return a[key] < b[key] ? -1 : 1
+    }
+  }
 }

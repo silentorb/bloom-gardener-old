@@ -33,5 +33,13 @@ var Graft;
         target.parentNode.replaceChild(new_item, target);
         return new_item;
     }
+    function sort(key) {
+        return function (a, b) {
+            if (a[key] == b[key])
+                return 0;
+            return a[key] < b[key] ? -1 : 1;
+        };
+    }
+    Graft.sort = sort;
 })(Graft || (Graft = {}));
 //# sourceMappingURL=graft.js.map
