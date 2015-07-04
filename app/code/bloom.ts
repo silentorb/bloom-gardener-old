@@ -8,7 +8,7 @@ module Bloom {
   export interface Bulb {
     name:string
     children:Bulb[]
-    instantiate:{(args?): Flower}
+    instantiate:{(element, args): Flower}
   }
 
   export interface Flower {
@@ -28,11 +28,15 @@ module Bloom {
     if (typeof bulb.instantiate != 'function')
       throw new Error('Bulb ' + bulb_name + ' is static and cannot be instantiated.')
 
-    return bulb.instantiate(args)
+    return bulb.instantiate(null, args)
   }
 
   export function add_bulb(bulb:Bulb) {
     bulbs[bulb.name] = bulb
+  }
+
+  export function get_bulb(name:string) {
+    return bulbs[name]
   }
 
   export function add_bulbs(bulbs:Bulb[]) {

@@ -41,7 +41,7 @@ module Bulb_Loader {
     var bulb = {
       name: data.name,
       children: [],
-      instantiate: (args)=> create_flower(data, args)
+      instantiate: (element, args)=> create_flower(element, data, args)
     }
 
     return bulb
@@ -51,33 +51,37 @@ module Bulb_Loader {
     return templates[template_name].cloneNode(true)
   }
 
-  function create_flower(data:Source, args):Bloom.Flower {
-    var element = render(data.template)
+  function create_flower(element, data:Source, args = {}):Bloom.Flower {
+    element = element || render(data.template)
     var flower:Extended_Flower = {
       element: element,
-      children: []
+      children: [],
+      elements: {
+        root: element
+      }
     }
 
-    var elements = {
-      root: element
-    }
-
-    flower.elements =  aggregate_properties(element, data, elements)
+    process_tree(element, data, flower.elements)
 
     if (data.initialize)
-      data.initialize(flower.elements, args)
+      data.initialize.call(flower, flower.elements, args)
 
     return flower
   }
 
-  function aggregate_properties(element, data, result = {}) {
+  function process_tree(element, data, result) {
     for (var i = 0; i < element.children.length; ++i) {
       var child = element.children[i]
       var name = child.getAttribute('name')
       if (name) {
         result[name] = child
       }
-      aggregate_properties(child, data, result)
+
+      var bulb = Bloom.get_bulb(child.nodeName.toLowerCase())
+      if (bulb) {
+        bulb.instantiate(child)
+      }
+      process_tree(child, data, result)
     }
 
     return result

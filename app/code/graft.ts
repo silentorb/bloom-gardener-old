@@ -47,4 +47,47 @@ module Graft {
       return a[key] < b[key] ? -1 : 1
     }
   }
+
+  export class Event {
+    listeners = []
+    one_time = []
+    was_invoked = false
+    last_args:any[] = null
+
+    add(listener, callback) {
+      this.listeners.push({
+        listener: listener,
+        callback: callback
+      })
+    }
+
+    once(listener, callback) {
+      if (this.was_invoked) {
+        callback.apply(listener, this.last_args)
+      }
+      else {
+        this.one_time.push({
+          listener: listener,
+          callback: callback
+        })
+      }
+    }
+
+    invoke() {
+      var args = this.last_args = Array.prototype.slice.call(arguments)
+
+      for (var i = 0; i < this.listeners.length; ++i) {
+        var item = this.listeners[i]
+        item.callback.apply(item.listener, args)
+      }
+
+      for (var i = 0; i < this.one_time.length; ++i) {
+        var item = this.one_time[i]
+        item.callback.apply(item.listener, args)
+      }
+
+      this.one_time = []
+      this.was_invoked = true
+    }
+  }
 }

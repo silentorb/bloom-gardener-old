@@ -12,13 +12,17 @@ var Bloom;
             throw new Error('Could not find bulb ' + bulb_name + '.');
         if (typeof bulb.instantiate != 'function')
             throw new Error('Bulb ' + bulb_name + ' is static and cannot be instantiated.');
-        return bulb.instantiate(args);
+        return bulb.instantiate(null, args);
     }
     Bloom.create_flower = create_flower;
     function add_bulb(bulb) {
         bulbs[bulb.name] = bulb;
     }
     Bloom.add_bulb = add_bulb;
+    function get_bulb(name) {
+        return bulbs[name];
+    }
+    Bloom.get_bulb = get_bulb;
     function add_bulbs(bulbs) {
         for (var i in bulbs) {
             add_bulb(bulbs[i]);

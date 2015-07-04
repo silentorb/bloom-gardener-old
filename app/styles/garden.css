@@ -37,11 +37,11 @@ form button {
 form .checkbox {
   margin-bottom: 1em;
 }
-left-bar {
+.left-bar {
   display: flex;
   flex-direction: column;
 }
-left-bar > * {
+.left-bar > * {
   padding: .3em .5em;
 }
 garden-hub {

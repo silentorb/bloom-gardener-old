@@ -1,14 +1,3 @@
-<garden-hub name="garden-hub">
-  <left-bar name="left_bar">
-
-  </left-bar>
-  <content name="content">
-    <div name="content_placeholder"></div>
-  </content>
-</garden-hub>
-
-<a name="trellis-link" href="#"></a>
-
 <div name="garden-login" class="centered-content" style="width: 100%; height: 100%">
   <form class="form-signin" name="form">
     <h2>Log In</h2>
@@ -24,12 +13,25 @@
   </form>
 </div>
 
+<garden-hub name="garden-hub">
+  <bloom-list name="trellises" class="left-bar">
+
+  </bloom-list>
+  <content name="content">
+    <div name="content_placeholder"></div>
+  </content>
+</garden-hub>
+
+<a name="trellis-link" href="#"></a>
+
 <div name="seed-list">
   <h2 name="title"></h2>
 
-  <div name="list"></div>
+  <bloom-list name="list"></bloom-list>
 </div>
 
-<table name="entity-row">
+<div name="entity-row">
   <span name="name">An entity</span>
-</table>
+</div>
+
+<div name="bloom-list"></div>
