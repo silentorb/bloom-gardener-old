@@ -9,10 +9,12 @@ module Bulb_Loader {
     template?:string
     initialize?:{(elements, args):void}
     tag?:string
+    inputs?: any
   }
 
   interface Extended_Flower extends Bloom.Flower {
     elements?
+    flowers?
   }
 
   export function load_templates(url):Promise<void> {
@@ -59,12 +61,19 @@ module Bulb_Loader {
     if (!element) {
       element = render(data.template)
     }
-    else if (data.tag && element.nodeName != data.tag.toUpperCase()) {
-      var old_element = element
-      element = document.createElement(data.tag)
-      for (var i in old_element.attributes) {
-        var attribute = old_element.attributes[i]
+    else {
+      var source = render(data.template)
+      //element = document.createElement(data.tag || data.name)
+      for (var j in source.attributes) {
+        var attribute = source.attributes[j]
+        if (attribute.name == 'name')
+          continue
+
         element.setAttribute(attribute.name , attribute.value)
+      }
+      var length = source.children.length
+      for (var i = 0; i < length; ++i) {
+        element.appendChild(source.children[0])
       }
     }
 
@@ -73,10 +82,22 @@ module Bulb_Loader {
       children: [],
       elements: {
         root: element
+      },
+      flowers: {
+        self: flower
       }
     }
 
-    process_tree(element, data, flower.elements)
+    element.flower = flower
+
+    process_tree(element, data, flower.elements, flower.flowers)
+
+    //if (data.inputs) {
+    //  for (var j in data.inputs) {
+    //    var input_info = data.inputs[j]
+    //    new MetaHub.Variable<any>(null)
+    //  }
+    //}
 
     if (data.initialize)
       data.initialize.call(flower, flower.elements, args)
@@ -84,7 +105,7 @@ module Bulb_Loader {
     return flower
   }
 
-  function process_tree(element, data, result) {
+  function process_tree(element, data, result, flowers) {
     for (var i = 0; i < element.children.length; ++i) {
       var child = element.children[i]
       var bulb = Bloom.get_bulb(child.nodeName.toLowerCase())
@@ -95,8 +116,10 @@ module Bulb_Loader {
       var name = child.getAttribute('name')
       if (name) {
         result[name] = child
+        if (child.flower)
+          flowers[name] = child.flower
       }
-      process_tree(child, data, result)
+      process_tree(child, data, result, flowers)
     }
 
     return result

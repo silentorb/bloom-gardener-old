@@ -60,3 +60,6 @@ bloom-header {
   display: table-row;
   font-weight: bold;
 }
+bloom-tbody {
+  display: table-row-group;
+}

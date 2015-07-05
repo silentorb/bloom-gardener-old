@@ -34,5 +34,16 @@ var Traveler = {
     }
 
     return result
+  },
+
+
+  map_to_array: function (list, mapper) {
+    var result = []
+
+    for (var i in list) {
+      result.push(mapper(list[i], i))
+    }
+
+    return result
   }
 }

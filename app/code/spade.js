@@ -33,4 +33,3 @@ var Spade;
     }
     Spade.append_list = append_list;
 })(Spade || (Spade = {}));
-//# sourceMappingURL=spade.js.map

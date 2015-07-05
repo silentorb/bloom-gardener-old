@@ -19,7 +19,7 @@ var MetaHub;
     }
     MetaHub.connect = connect;
     function sequence(list) {
-        for (var i = 0; i < list.length - 2; ++i) {
+        for (var i = 0; i < list.length - 1; ++i) {
             MetaHub.connect(list[i], list[i + 1]);
         }
     }
@@ -29,7 +29,7 @@ var MetaHub;
             this.mapper = mapper;
         }
         Map.prototype.set_value = function (value) {
-            MetaHub.changed(this, value);
+            MetaHub.changed(this, this.mapper(value));
         };
         Map.prototype.get_value = function () {
             var value = this.source ? this.source.get_value() : null;
@@ -38,21 +38,39 @@ var MetaHub;
         return Map;
     })();
     MetaHub.Map = Map;
-    var Literal = (function () {
-        function Literal(value) {
+    var List_Map = (function () {
+        function List_Map(mapper) {
+            this.mapper = mapper;
+        }
+        List_Map.prototype.set_value = function (value) {
+            MetaHub.changed(this, this.map(value));
+        };
+        List_Map.prototype.get_value = function () {
+            var value = this.source ? this.source.get_value() : null;
+            return this.map(value);
+        };
+        List_Map.prototype.map = function (value) {
+            if (!value)
+                return [];
+            return value.map(this.mapper);
+        };
+        return List_Map;
+    })();
+    MetaHub.List_Map = List_Map;
+    var Variable = (function () {
+        function Variable(value) {
             this.value = value;
         }
-        Literal.prototype.get_value = function () {
+        Variable.prototype.get_value = function () {
             return this.value;
         };
-        Literal.prototype.set_value = function (value) {
+        Variable.prototype.set_value = function (value) {
             if (this.value === value)
                 return;
             this.value = value;
             MetaHub.changed(this, value);
         };
-        return Literal;
+        return Variable;
     })();
-    MetaHub.Literal = Literal;
+    MetaHub.Variable = Variable;
 })(MetaHub || (MetaHub = {}));
-//# sourceMappingURL=metahub.js.map

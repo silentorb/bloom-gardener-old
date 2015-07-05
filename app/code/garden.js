@@ -7,7 +7,7 @@ var Garden;
     var change_page;
     function start() {
         var placeholder = document.getElementsByTagName('page-placeholder')[0];
-        change_page = new MetaHub.Literal(null);
+        change_page = new MetaHub.Variable(null);
         MetaHub.sequence([
             change_page,
             new MetaHub.Map(function (page) { return page ? page.element : null; }),
@@ -23,8 +23,7 @@ var Garden;
                 }
             ],
             "version": "1.0.0.browser"
-        })
-            .then(function (response) {
+        }).then(function (response) {
             var user = response.objects[0];
             if (user.username == 'anonymous') {
                 goto('garden-login');
@@ -42,9 +41,7 @@ var Garden;
     Garden.goto = goto;
 })(Garden || (Garden = {}));
 document.addEventListener('DOMContentLoaded', function () {
-    Bulb_Loader.load_templates('elements/elements.html')
-        .then(function () {
+    Bulb_Loader.load_templates('elements/elements.html').then(function () {
         Garden.start();
     });
 });
-//# sourceMappingURL=garden.js.map

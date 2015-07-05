@@ -12,32 +12,35 @@
         },
         "garden-hub": {
             initialize: function (elements, args) {
-                Wind.vineyard.get('vineyard/schema')
-                    .then(function (response) {
+                Wind.vineyard.get('vineyard/schema').then(function (response) {
                     console.log(response);
                     var trellises = response.data.objects.sort(Graft.sort('name'));
                     var list = elements.trellises;
-                    Graft.bind_list_to_element(list, trellises, function (item, name) {
-                        var link = Bloom.create_flower('trellis-link', {
-                            trellis: item,
-                            click: click_trellis
-                        });
-                        return link.element;
-                    });
+                    MetaHub.sequence([
+                        new MetaHub.Variable(trellises),
+                        new MetaHub.List_Map(function (item, name) {
+                            var link = Bloom.create_flower('trellis-link', {
+                                trellis: item,
+                                click: click_trellis
+                            });
+                            return link.element;
+                        }),
+                        new Graft.Element_List_Input(list)
+                    ]);
                     var page_args = Spade.get_query_arguments();
                     if (page_args.trellis) {
                         var trellis = trellises.filter(function (t) {
                             return t.name == page_args.trellis;
                         })[0];
                         if (trellis)
-                            change_content(Bloom.create_flower('entity-list', { trellis: trellis }));
+                            content.set_value(Bloom.create_flower('entity-list', { trellis: trellis }));
                     }
                 });
-                var content = new Graft.Literal(null);
+                var content = new MetaHub.Variable(null);
                 MetaHub.sequence([
                     content,
                     new MetaHub.Map(function (page) {
-                        return page.element;
+                        return page ? page.element : null;
                     }),
                     new Graft.Element_Input(elements.content_placeholder)
                 ]);
@@ -56,23 +59,26 @@
                 var trellis = args.trellis;
                 elements.title.innerHTML = trellis.name;
                 var properties = Traveler.filter(trellis.properties, property_filter);
+                this.flowers.table.inputs.header.set_value(Traveler.map_to_array(properties, function (p, i) {
+                    return i;
+                }));
                 //populate_row(elements.header, properties, function(property, i) {
                 //  return i
                 //})
                 Wind.vineyard.query({
                     "trellis": trellis.name,
                     "version": "1.0.0.browser"
-                })
-                    .then(function (response) {
+                }).then(function (response) {
                     MetaHub.sequence([
-                        new Graft.Literal(response.objects),
-                        new MetaHub.Map(function (item, name) {
+                        new MetaHub.Variable(response.objects),
+                        new MetaHub.List_Map(function (item, name) {
                             var link = Bloom.create_flower('entity-row', {
                                 seed: item,
                                 trellis: trellis
                             });
+                            return link.element;
                         }),
-                        new Graft.Element_List_Input(elements.table)
+                        new Graft.Element_List_Input(elements.list)
                     ]);
                 });
             }
@@ -87,12 +93,22 @@
             }
         },
         "bloom-table": {
+            //inputs: {
+            //  header: {}
+            //},
             initialize: function (elements, args) {
-                Graft.bind_list_to_element(elements.header, args.header, function (item) {
-                    var cell = document.createElement('bloom-cell');
-                    cell.innerHTML = 'Hello';
-                    return cell;
-                });
+                this.inputs = {
+                    header: new MetaHub.Variable(null)
+                };
+                MetaHub.sequence([
+                    this.inputs.header,
+                    new MetaHub.List_Map(function (item) {
+                        var cell = document.createElement('bloom-cell');
+                        cell.innerHTML = item;
+                        return cell;
+                    }),
+                    new Graft.Element_List_Input(elements.header)
+                ]);
             }
         }
     };
@@ -133,4 +149,3 @@
         return trellis;
     }
 })();
-//# sourceMappingURL=garden-hub.js.map

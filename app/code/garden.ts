@@ -5,12 +5,12 @@
 
 module Garden {
 
-  var change_page:MetaHub.Literal<Node>
+  var change_page:MetaHub.Variable<Node>
 
   export function start() {
 
     var placeholder = document.getElementsByTagName('page-placeholder')[0]
-    change_page = new MetaHub.Literal<Node>(null)
+    change_page = new MetaHub.Variable<Node>(null)
     MetaHub.sequence([
       change_page,
       new MetaHub.Map((page) => page ? page.element : null),

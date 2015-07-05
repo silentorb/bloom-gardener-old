@@ -9,11 +9,9 @@ Bloom.add_bulb(Bulb_Loader.create_bulb({
                 name: elements.name.value,
                 pass: elements.password.value
             };
-            Wind.vineyard.post('vineyard/login', data)
-                .then(function (response) {
+            Wind.vineyard.post('vineyard/login', data).then(function (response) {
                 Garden.goto('garden-hub');
             });
         });
     }
 }));
-//# sourceMappingURL=garden-login.js.map

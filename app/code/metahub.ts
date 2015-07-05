@@ -10,7 +10,7 @@ module MetaHub {
     source:Output<T>
   }
 
-  export function changed<T>(output:Output<T>, value) {
+  export function changed<T>(output:Output<T>, value:T) {
     if (!output.targets)
       return
 
@@ -33,7 +33,7 @@ module MetaHub {
   }
 
   export function sequence(list) {
-    for (var i = 0; i < list.length - 2; ++i) {
+    for (var i = 0; i < list.length - 1; ++i) {
       MetaHub.connect(list[i], list[i + 1])
     }
   }
@@ -48,16 +48,43 @@ module MetaHub {
     }
 
     set_value(value) {
-      MetaHub.changed(this, value)
+      MetaHub.changed(this, this.mapper(value))
     }
 
     get_value() {
       var value = this.source ? this.source.get_value() : null
       return this.mapper(value)
     }
+
   }
 
-  export class Literal<T> implements Output<T> {
+  export class List_Map<I, O> implements Input<I[]>, Output<O[]> {
+    mapper
+    source
+    targets
+
+    constructor(mapper) {
+      this.mapper = mapper
+    }
+
+    set_value(value) {
+      MetaHub.changed(this, this.map(value))
+    }
+
+    get_value() {
+      var value = this.source ? this.source.get_value() : null
+      return this.map(value)
+    }
+
+    private map(value) {
+      if (!value)
+        return []
+
+      return value.map(this.mapper)
+    }
+  }
+
+  export class Variable<T> implements Output<T> {
     value:T
     targets
 

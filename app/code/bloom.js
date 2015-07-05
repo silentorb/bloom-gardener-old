@@ -30,4 +30,3 @@ var Bloom;
     }
     Bloom.add_bulbs = add_bulbs;
 })(Bloom || (Bloom = {}));
-//# sourceMappingURL=bloom.js.map

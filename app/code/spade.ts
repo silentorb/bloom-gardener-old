@@ -15,7 +15,7 @@ module Spade {
   }
 
 
-  export function get_query_arguments() {
+  export function get_query_arguments():any {
     var result = {};
     var text = window.location.search;
 
