@@ -47,3 +47,16 @@ form .checkbox {
 garden-hub {
   display: flex;
 }
+bloom-table {
+  display: table;
+}
+bloom-cell {
+  display: table-cell;
+}
+bloom-row {
+  display: table-row;
+}
+bloom-header {
+  display: table-row;
+  font-weight: bold;
+}

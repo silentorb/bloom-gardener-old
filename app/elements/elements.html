@@ -24,14 +24,27 @@
 
 <a name="trellis-link" href="#"></a>
 
-<div name="seed-list">
+<div name="entity-list">
   <h2 name="title"></h2>
 
-  <bloom-list name="list"></bloom-list>
+  <bloom-table name="table" class="garden-table">
+
+  </bloom-table>
+  <style>
+    .garden-table bloom-cell {
+      max-width: 100px;
+      padding: 10px;
+      overflow: hidden;
+    }
+  </style>
 </div>
 
-<div name="entity-row">
-  <span name="name">An entity</span>
-</div>
+<bloom-row name="entity-row">
+</bloom-row>
 
-<div name="bloom-list"></div>
+<bloom-table name="bloom-table">
+  <bloom-tbody>
+  <bloom-header name="header"></bloom-header>
+  </bloom-tbody>
+  <bloom-tbody name="list"></bloom-tbody>
+</bloom-table>

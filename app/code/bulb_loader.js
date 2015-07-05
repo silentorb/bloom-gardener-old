@@ -34,11 +34,23 @@ var Bulb_Loader;
     }
     Bulb_Loader.create_bulb = create_bulb;
     function render(template_name) {
+        if (!templates[template_name])
+            throw new Error('There is no template named ' + template_name + '.');
         return templates[template_name].cloneNode(true);
     }
     function create_flower(element, data, args) {
         if (args === void 0) { args = {}; }
-        element = element || render(data.template);
+        if (!element) {
+            element = render(data.template);
+        }
+        else if (data.tag && element.nodeName != data.tag.toUpperCase()) {
+            var old_element = element;
+            element = document.createElement(data.tag);
+            for (var i in old_element.attributes) {
+                var attribute = old_element.attributes[i];
+                element.setAttribute(attribute.name, attribute.value);
+            }
+        }
         var flower = {
             element: element,
             children: [],
@@ -54,13 +66,14 @@ var Bulb_Loader;
     function process_tree(element, data, result) {
         for (var i = 0; i < element.children.length; ++i) {
             var child = element.children[i];
+            var bulb = Bloom.get_bulb(child.nodeName.toLowerCase());
+            if (bulb) {
+                var flower = bulb.instantiate(child, {});
+                child = flower.element; // instantiate can replace the element
+            }
             var name = child.getAttribute('name');
             if (name) {
                 result[name] = child;
-            }
-            var bulb = Bloom.get_bulb(child.nodeName.toLowerCase());
-            if (bulb) {
-                bulb.instantiate(child);
             }
             process_tree(child, data, result);
         }

@@ -7,7 +7,12 @@ var Garden;
     var change_page;
     function start() {
         var placeholder = document.getElementsByTagName('page-placeholder')[0];
-        change_page = Graft.bind_to_element(placeholder, null, function (page) { return page.element; });
+        change_page = new MetaHub.Literal(null);
+        MetaHub.sequence([
+            change_page,
+            new MetaHub.Map(function (page) { return page ? page.element : null; }),
+            new Graft.Element_Input(placeholder)
+        ]);
         Wind.vineyard.query({
             "trellis": "user",
             "filters": [
@@ -32,7 +37,7 @@ var Garden;
     Garden.start = start;
     function goto(name) {
         var new_page = Bloom.create_flower(name);
-        change_page(new_page);
+        change_page.set_value(new_page);
     }
     Garden.goto = goto;
 })(Garden || (Garden = {}));

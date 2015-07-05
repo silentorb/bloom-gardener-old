@@ -5,12 +5,17 @@
 
 module Garden {
 
-  var change_page
+  var change_page:MetaHub.Literal<Node>
 
   export function start() {
 
     var placeholder = document.getElementsByTagName('page-placeholder')[0]
-    change_page = Graft.bind_to_element(placeholder, null, (page) => page.element)
+    change_page = new MetaHub.Literal<Node>(null)
+    MetaHub.sequence([
+      change_page,
+      new MetaHub.Map((page) => page ? page.element : null),
+      new Graft.Element_Input(placeholder)
+    ])
 
     Wind.vineyard.query({
       "trellis": "user",
@@ -36,7 +41,7 @@ module Garden {
 
   export function goto(name) {
     var new_page = Bloom.create_flower(name)
-    change_page(new_page)
+    change_page.set_value(new_page)
   }
 
 }
