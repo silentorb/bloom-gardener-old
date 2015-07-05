@@ -1,14 +1,13 @@
 var MetaHub;
 (function (MetaHub) {
-    function update(output) {
+    function changed(output, value) {
         if (!output.targets)
             return;
-        var value = output.get_value();
         for (var i = 0; i < output.targets.length; ++i) {
             output.targets[i].set_value(value);
         }
     }
-    MetaHub.update = update;
+    MetaHub.changed = changed;
     function connect(output, input) {
         if (input.source == output)
             return;
@@ -30,7 +29,7 @@ var MetaHub;
             this.mapper = mapper;
         }
         Map.prototype.set_value = function (value) {
-            MetaHub.update(this);
+            MetaHub.changed(this, value);
         };
         Map.prototype.get_value = function () {
             var value = this.source ? this.source.get_value() : null;
@@ -50,7 +49,7 @@ var MetaHub;
             if (this.value === value)
                 return;
             this.value = value;
-            MetaHub.update(this);
+            MetaHub.changed(this, value);
         };
         return Literal;
     })();

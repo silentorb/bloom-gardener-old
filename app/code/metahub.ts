@@ -10,11 +10,10 @@ module MetaHub {
     source:Output<T>
   }
 
-  export function update<T>(output:Output<T>) {
+  export function changed<T>(output:Output<T>, value) {
     if (!output.targets)
       return
 
-    var value = output.get_value()
     for (var i = 0; i < output.targets.length; ++i) {
       output.targets[i].set_value(value)
     }
@@ -28,7 +27,6 @@ module MetaHub {
       output.targets = []
 
     input.source = output
-
     output.targets.push(input)
 
     input.set_value(output.get_value())
@@ -50,7 +48,7 @@ module MetaHub {
     }
 
     set_value(value) {
-      MetaHub.update(this)
+      MetaHub.changed(this, value)
     }
 
     get_value() {
@@ -76,7 +74,7 @@ module MetaHub {
         return
 
       this.value = value
-      MetaHub.update(this)
+      MetaHub.changed(this, value)
     }
   }
 }

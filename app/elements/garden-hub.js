@@ -33,11 +33,21 @@
                             change_content(Bloom.create_flower('entity-list', { trellis: trellis }));
                     }
                 });
-                var change_content = Graft.bind_to_element(elements.content_placeholder, new Graft.Literal_Output(null), function (page) {
-                    return page.element;
-                });
+                var content = new Graft.Literal(null);
+                MetaHub.sequence([
+                    content,
+                    new MetaHub.Map(function (page) {
+                        return page.element;
+                    }),
+                    new Graft.Element_Input(elements.content_placeholder)
+                ]);
+                //var change_content = Graft.bind_to_element(elements.content_placeholder,
+                //  new Graft.Literal_Output<Node>(null),
+                //  function (page) {
+                //    return page.element
+                //  })
                 function click_trellis(trellis) {
-                    change_content(Bloom.create_flower('entity-list', { trellis: trellis }));
+                    content.set_value(Bloom.create_flower('entity-list', { trellis: trellis }));
                 }
             }
         },
@@ -54,13 +64,16 @@
                     "version": "1.0.0.browser"
                 })
                     .then(function (response) {
-                    Graft.bind_list_to_element(elements.table, new Graft.Literal_Output(response.objects), function (item, name) {
-                        var link = Bloom.create_flower('entity-row', {
-                            seed: item,
-                            trellis: trellis
-                        });
-                        return link.element;
-                    });
+                    MetaHub.sequence([
+                        new Graft.Literal(response.objects),
+                        new MetaHub.Map(function (item, name) {
+                            var link = Bloom.create_flower('entity-row', {
+                                seed: item,
+                                trellis: trellis
+                            });
+                        }),
+                        new Graft.Element_List_Input(elements.table)
+                    ]);
                 });
             }
         },
