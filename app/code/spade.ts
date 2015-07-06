@@ -1,3 +1,5 @@
+declare var Traveler
+
 module Spade {
 
   export function remove(node) {
@@ -33,6 +35,21 @@ module Spade {
     for (var i in list) {
       element.appendChild(list[i])
     }
+  }
+
+  export function set_query_arguments(args) {
+    var arg_strings = Traveler.map_to_array(args, function(arg, i) {
+      return i + '=' + arg
+    })
+
+    var query = arg_strings.length > 0
+      ? '?' + arg_strings.join('&')
+      : ''
+
+    var url = window.location.protocol + "//" + window.location.host
+      + window.location.pathname + query
+
+    history.pushState({}, '', url)
   }
 
 }

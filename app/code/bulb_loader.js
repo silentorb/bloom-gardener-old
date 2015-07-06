@@ -21,6 +21,14 @@ var Bulb_Loader;
         templates[name] = node;
     }
     Bulb_Loader.load_template = load_template;
+    function register_many_bulbs(bulbs) {
+        for (var i in bulbs) {
+            var bulb = bulbs[i];
+            bulb.name = i;
+            Bloom.add_bulb(Bulb_Loader.create_bulb(bulb));
+        }
+    }
+    Bulb_Loader.register_many_bulbs = register_many_bulbs;
     function create_bulb(data) {
         if (!data.template)
             data.template = data.name;

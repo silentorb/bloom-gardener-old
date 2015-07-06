@@ -6,10 +6,10 @@ declare var Traveler:any
   var bulbs = {
     "trellis-link": {
       initialize: function (elements, args) {
-        elements.root.innerHTML = args.trellis.name
-        elements.root.addEventListener('click', function (e) {
+        elements.link.innerHTML = args.trellis.name
+        elements.link.addEventListener('click', function (e) {
           e.preventDefault()
-          args.click(args.trellis)
+          goto_trellis(args.trellis)
         })
       }
     },
@@ -20,15 +20,16 @@ declare var Traveler:any
         Wind.vineyard.get('vineyard/schema')
           .then(function (response) {
             console.log(response)
-            var trellises = response.data.objects.sort(Graft.sort('name'))
+            var trellises = response.data.objects.sort(Graft.sort('name')).map(prepare_trellis)
             var list = elements.trellises
 
             MetaHub.sequence([
               new MetaHub.Variable<any[]>(trellises),
               new MetaHub.List_Map(function (item, name) {
                 var link = Bloom.create_flower('trellis-link', {
-                  trellis: item,
-                  click: click_trellis
+                  trellis: item
+                  //,
+                  //goto_trellis: goto_trellis
                 })
                 return link.element
               }),
@@ -40,8 +41,33 @@ declare var Traveler:any
               var trellis = trellises.filter(function (t) {
                 return t.name == page_args.trellis
               })[0]
-              if (trellis)
-                content.set_value(Bloom.create_flower('entity-list', {trellis: trellis}))
+              if (trellis) {
+                var id = page_args[trellis.primary_key]
+                if (!id) {
+                  content.set_value(Bloom.create_flower('entity-list', {trellis: trellis}))
+                }
+                else {
+                  var query = {
+                    "trellis": trellis.name,
+                    "filters": [
+                      {
+                        "path": trellis.primary_key,
+                        "value": id
+                      }
+                    ],
+                    "version": "browser"
+                  }
+                  var seed:any = {}
+                  seed[trellis.primary_key] = id
+                  Wind.vineyard.query(query)
+                    .then(function (response) {
+                      content.set_value(Bloom.create_flower('entity-edit', {
+                        trellis: trellis,
+                        seed: response.objects[0]
+                      }))
+                    })
+                }
+              }
             }
           })
 
@@ -54,14 +80,18 @@ declare var Traveler:any
           new Graft.Element_Input(elements.content_placeholder)
         ])
 
-        //var change_content = Graft.bind_to_element(elements.content_placeholder,
-        //  new Graft.Literal_Output<Node>(null),
-        //  function (page) {
-        //    return page.element
-        //  })
-
-        function click_trellis(trellis) {
+        goto_trellis = function (trellis) {
           content.set_value(Bloom.create_flower('entity-list', {trellis: trellis}))
+          Spade.set_query_arguments({trellis: trellis.name})
+        }
+
+        goto_entity = function (trellis, seed) {
+          content.set_value(Bloom.create_flower('entity-edit', {trellis: trellis, seed: seed}))
+          var args:any = {
+            trellis: trellis.name
+          }
+          args[trellis.primary_key] = seed[trellis.primary_key]
+          Spade.set_query_arguments(args)
         }
       }
     },
@@ -72,7 +102,7 @@ declare var Traveler:any
         elements.title.innerHTML = trellis.name
         var properties = Traveler.filter(trellis.properties, property_filter)
 
-        this.flowers.table.inputs.header.set_value(Traveler.map_to_array(properties, function(p, i) {
+        this.flowers.table.inputs.header.set_value(Traveler.map_to_array(properties, function (p, i) {
           return i
         }))
         //populate_row(elements.header, properties, function(property, i) {
@@ -107,6 +137,18 @@ declare var Traveler:any
         populate_row(elements.root, properties, function (property, i) {
           return format_property_value(args.seed, property, i)
         })
+
+        elements.root.addEventListener('click', function (e) {
+          e.preventDefault()
+          goto_entity(args.trellis, args.seed)
+        })
+      }
+    },
+
+    "entity-edit": {
+      initialize: function (elements, args) {
+        var trellis = args.trellis, seed = args.seed
+        elements.title.innerHTML = trellis.name
       }
     },
 
@@ -130,6 +172,9 @@ declare var Traveler:any
       }
     }
   }
+
+  var goto_trellis
+  var goto_entity
 
   function property_filter(property) {
     return property.type != 'list' && property.type != 'reference'
@@ -159,15 +204,7 @@ declare var Traveler:any
     Spade.append_list(element, cells)
   }
 
-  function load_bulbs(bulbs) {
-    for (var i in bulbs) {
-      var bulb = bulbs[i]
-      bulb.name = i
-      Bloom.add_bulb(Bulb_Loader.create_bulb(bulb))
-    }
-  }
-
-  load_bulbs(bulbs)
+  Bulb_Loader.register_many_bulbs(bulbs)
 
   function prepare_trellis(trellis) {
     trellis.primary_key = trellis.primary_key || 'id'

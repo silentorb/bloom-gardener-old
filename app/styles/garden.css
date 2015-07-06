@@ -1,65 +1,121 @@
-.flex-container {
-  display: flex;
+/*.flex-container {*/
+    /*display: flex;*/
+/*}*/
+
+html {
+    height: 100%;
+    box-sizing: border-box;
 }
 body {
-  display: flex;
-  font-family: Trebuchet MS;
-  flex-direction: column;
-  margin: 0;
+    font-family: Trebuchet MS;
+    margin: 0;
+    height: 100%;
 }
+
 header {
-  background-color: #a3e8a3;
-  padding: 0.5em;
-  font-size: 2em;
+    background-color: #a3e8a3;
+    padding: 0.5em;
+    font-size: 2em;
 }
+
 main {
-  flex-grow: 1;
 }
+
 .centered-content {
-  display: flex;
-  justify-content: center;
-  align-items: center;
+    /*display: flex;*/
+    /*justify-content: center;*/
+    /*align-items: center;*/
 }
+
 form {
-  display: flex;
-  flex-direction: column;
-  align-items: stretch;
+    /*display: flex;*/
+    /*flex-direction: column;*/
+    /*align-items: stretch;*/
 }
+
 form input[type=text],
 form input[type=password],
 form button {
-  display: block;
-  font-size: 1em;
-  padding: 0.4em;
-  margin-bottom: 1em;
-  border-radius: 0.2em;
+    display: block;
+    font-size: 1em;
+    padding: 0.4em;
+    margin-bottom: 1em;
+    border-radius: 0.2em;
 }
+
 form .checkbox {
-  margin-bottom: 1em;
+    margin-bottom: 1em;
 }
+
 .left-bar {
-  display: flex;
-  flex-direction: column;
+    height: 100%;
+    overflow-y: scroll;
+    display: block;
 }
+
 .left-bar > * {
-  padding: .3em .5em;
+    padding: .3em .5em;
 }
+
 garden-hub {
-  display: flex;
+    display: flex;
+    height: calc(100% - 69px);
 }
+
 bloom-table {
-  display: table;
+    display: table;
+    border: rgb(90, 123, 44) solid 0px;
 }
+
+bloom-cell, bloom-row, bloom-header, bloom-tbody {
+    border:inherit
+}
+
 bloom-cell {
-  display: table-cell;
+    display: table-cell;
+    max-width: 120px;
+    padding: 10px;
+    overflow: hidden;
+    border-right-width: 3px;
 }
+
+bloom-cell:first-child {
+    border-left-width: 3px;
+}
+
 bloom-row {
-  display: table-row;
+    display: table-row;
+    text-align: right;
+    border-bottom-width: 2px;
+    cursor:pointer;
 }
+
 bloom-header {
-  display: table-row;
-  font-weight: bold;
+    display: table-row;
+    font-weight: bold;
+    text-align: center;
+    border-top-width: 3px;
+    border-bottom-width: 3px;
 }
+
 bloom-tbody {
-  display: table-row-group;
+    display: table-row-group;
+}
+
+bloom-row:nth-child(even) {
+    background-color: #CAF2CA;
+}
+
+bloom-row:hover {
+    background-color: #FFECAE;
+}
+
+content {
+    width: 100%;
+
+    overflow: auto;
+}
+
+.edit-form {
+    padding: 10px;
 }

@@ -37,6 +37,14 @@ module Bulb_Loader {
     templates[name] = node
   }
 
+  export function register_many_bulbs(bulbs) {
+    for (var i in bulbs) {
+      var bulb = bulbs[i]
+      bulb.name = i
+      Bloom.add_bulb(Bulb_Loader.create_bulb(bulb))
+    }
+  }
+
   export function create_bulb(data:Source):Bloom.Bulb {
     if (!data.template)
       data.template = data.name
@@ -69,7 +77,7 @@ module Bulb_Loader {
         if (attribute.name == 'name')
           continue
 
-        element.setAttribute(attribute.name , attribute.value)
+        element.setAttribute(attribute.name, attribute.value)
       }
       var length = source.children.length
       for (var i = 0; i < length; ++i) {
