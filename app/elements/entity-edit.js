@@ -5,11 +5,12 @@
             initialize: function (elements, args) {
                 var trellis = args.trellis, seed = args.seed;
                 var properties = Traveler.filter(trellis.properties, property_filter);
-                var title = trellis.name + ' ' + seed[trellis.primary_key];
+                var title = '<a href="?trellis=' + trellis.name + '">' + trellis.name + '</a>' + ' ' + seed[trellis.primary_key];
                 if (trellis.properties.name && seed.name) {
                     title += ' ' + seed.name;
                 }
                 elements.title.innerHTML = title;
+                var fields = {};
                 for (var i in properties) {
                     if (i == trellis.primary_key)
                         continue;
@@ -17,40 +18,133 @@
                     var label = document.createElement('label');
                     label.innerHTML = i;
                     wrapper.appendChild(label);
-                    wrapper.appendChild(document.createElement('br'));
                     elements.fields.appendChild(wrapper);
-                    var field = create_field(i, trellis.properties[i], args.seed);
-                    wrapper.appendChild(field);
+                    var field = create_field(i, trellis.properties[i], seed);
+                    wrapper.appendChild(field.element);
+                    fields[i] = field;
                 }
+                elements.form.addEventListener("submit", function (e) {
+                    e.preventDefault();
+                    save(trellis, seed, fields).then(function () {
+                        goto_trellis(trellis);
+                    });
+                });
+                elements.prune.addEventListener("click", function (e) {
+                    e.preventDefault();
+                    prune(trellis, seed).then(function () {
+                        goto_trellis(trellis);
+                    });
+                });
             }
         }
     };
     Bulb_Loader.register_many_bulbs(bulbs);
+    var methods = {
+        bool: create_bool_field,
+        datetime: create_datetime_field,
+        date: create_date_field,
+        float: create_number_field,
+        int: create_int_field,
+        string: create_string_field
+    };
     function create_field(name, property, seed) {
         if (methods[property.type]) {
             return methods[property.type](name, property, seed);
         }
         return create_string_field(name, property, seed);
     }
-    function create_string_field(name, property, seed) {
-        var field = document.createElement('input');
-        field.type = 'text';
-        field.value = seed[name];
+    function create_standard_field(tag, type, name) {
+        var field = document.createElement(tag);
+        field.type = type;
         field.setAttribute('name', name);
         return field;
     }
-    function create_bool_field(name, property, seed) {
-        var field = document.createElement('input');
-        field.type = 'checkbox';
-        field.checked = seed[name];
-        field.setAttribute('name', name);
+    function create_string_field(name, property, seed) {
+        var field = create_standard_field('input', 'text', name);
+        field.value = seed[name];
+        return {
+            element: field,
+            get_value: function () {
+                return field.value;
+            }
+        };
+    }
+    function create_number_field(name, property, seed) {
+        var field = create_standard_field('input', 'number', name);
+        field.value = seed[name];
+        return {
+            element: field,
+            get_value: function () {
+                return field.value;
+            }
+        };
+    }
+    function create_int_field(name, property, seed) {
+        var field = create_number_field(name, property, seed);
+        field.element.min = 0;
+        field.element.step = 1;
         return field;
+    }
+    function create_bool_field(name, property, seed) {
+        var field = create_standard_field('input', 'checkbox', name);
+        field.checked = seed[name];
+        return {
+            element: field,
+            get_value: function () {
+                return field.checked;
+            }
+        };
+    }
+    function create_datetime_field(name, property, seed) {
+        var field = create_standard_field('input', 'datetime', name);
+        field.valueAsDate = new Date(seed[name]);
+        return {
+            element: field,
+            get_value: function () {
+                return field.valueAsDate;
+            }
+        };
+    }
+    function create_date_field(name, property, seed) {
+        var field = create_standard_field('input', 'date', name);
+        field.valueAsDate = new Date(seed[name]);
+        return {
+            element: field,
+            get_value: function () {
+                return field.valueAsDate;
+            }
+        };
     }
     function property_filter(property) {
         return property.type != 'list' && property.type != 'reference';
     }
-    var methods = {
-        'bool': create_bool_field,
-        'string': create_string_field
-    };
+    function save(trellis, original, fields) {
+        var modified = Traveler.map(fields, function (field) {
+            return field.get_value();
+        });
+        var seed = {
+            trellis: trellis.name
+        };
+        seed[trellis.primary_key] = original[trellis.primary_key];
+        for (var i in modified) {
+            if (modified[i] != original[i]) {
+                seed[i] = modified[i];
+            }
+        }
+        var update = {
+            objects: [seed]
+        };
+        return Wind.vineyard.post('vineyard/update', update);
+    }
+    function prune(trellis, original) {
+        var seed = {
+            trellis: trellis.name
+        };
+        seed[trellis.primary_key] = original[trellis.primary_key];
+        seed['__deleted__'] = true;
+        var update = {
+            objects: [seed]
+        };
+        return Wind.vineyard.post('vineyard/update', update);
+    }
 })();

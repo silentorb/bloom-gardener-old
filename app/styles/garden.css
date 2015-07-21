@@ -18,6 +18,10 @@ header {
     font-size: 2em;
 }
 
+h2 {
+    margin-left: 10px;
+}
+
 main {
 }
 
@@ -27,14 +31,28 @@ main {
     /*align-items: center;*/
 }
 
+a, a:visited {
+    color: rgb(108, 0, 44);
+}
+
 form {
     /*display: flex;*/
     /*flex-direction: column;*/
     /*align-items: stretch;*/
 }
 
-form input[type=text],
-form input[type=password],
+form label {
+    display: block;
+    margin-bottom: 5px;
+    color: rgb(0, 70, 0);
+}
+
+form input,
+/*form input[type=text],*/
+/*form input[type=password],*/
+/*form input[type=number],*/
+/*form input[type=date],*/
+/*form input[type=datetime],*/
 form button {
     display: block;
     font-size: 1em;
@@ -117,5 +135,13 @@ content {
 }
 
 .edit-form {
-    padding: 10px;
+    padding: 20px;
+}
+
+.bloom-button-list {
+    display: flex;
+}
+
+.bloom-button-list button {
+    margin-right: 10px;
 }
