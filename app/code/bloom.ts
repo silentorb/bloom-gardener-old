@@ -3,7 +3,7 @@
 module Bloom {
   declare var document
 
-  var bulbs:{ [id: string]: Bulb; } = {}
+  var bulbs:{ [id: string]: Bulb } = {}
 
   export interface Bulb {
     name:string

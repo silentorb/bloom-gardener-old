@@ -5,7 +5,13 @@
 var Garden;
 (function (Garden) {
     var change_page;
+    var config;
+    Garden.vines = [];
+    Garden.views = {};
     function start() {
+        this.config = Gardener_Config;
+        var server = this.config.servers[0];
+        this.views = server.views || {};
         var placeholder = document.getElementsByTagName('page-placeholder')[0];
         change_page = new MetaHub.Variable(null);
         MetaHub.sequence([
@@ -39,6 +45,15 @@ var Garden;
         change_page.set_value(new_page);
     }
     Garden.goto = goto;
+    function fertilize(bulbs) {
+        for (var i in bulbs) {
+            var bulb = bulbs[i];
+            if (bulb.type == 'vine') {
+                Garden.vines[bulb.name] = bulb;
+            }
+        }
+    }
+    Garden.fertilize = fertilize;
 })(Garden || (Garden = {}));
 document.addEventListener('DOMContentLoaded', function () {
     Bulb_Loader.load_templates('elements/elements.html').then(function () {

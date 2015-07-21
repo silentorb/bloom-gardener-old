@@ -18,7 +18,7 @@ declare var Traveler:any
     "garden-hub": {
       initialize: function (elements, args) {
 
-        Wind.vineyard.get('vineyard/schema')
+        Wind.vineyard.post('vineyard/gardener/schema', {})
           .then(function (response) {
             console.log(response)
             var trellises = response.data.objects.sort(Graft.sort('name')).map(prepare_trellis)

@@ -4,10 +4,36 @@
 /// <reference path="graft.ts"/>
 
 module Garden {
+  declare var Gardener_Config
+
+  interface Config {
+    servers:Server_Config[]
+  }
+
+  interface Server_Config {
+    name:string
+    url:string
+    views:{ [id: string]: View_Config }
+  }
+
+  interface View_Config {
+    properties:{ [id: string]: View_Property_Config }
+  }
+
+  interface View_Property_Config{
+    vine
+  }
 
   var change_page:MetaHub.Variable<Node>
+  var config:Config
+
+  export var vines = []
+  export var views = {}
 
   export function start() {
+    this.config = Gardener_Config
+    var server = this.config.servers[0]
+    this.views = server.views || {}
 
     var placeholder = document.getElementsByTagName('page-placeholder')[0]
     change_page = new MetaHub.Variable<Node>(null)
@@ -44,6 +70,14 @@ module Garden {
     change_page.set_value(new_page)
   }
 
+  export function fertilize(bulbs) {
+    for (var i in bulbs) {
+      var bulb = bulbs[i]
+      if (bulb.type == 'vine') {
+        vines[bulb.name] = bulb
+      }
+    }
+  }
 }
 
 document.addEventListener('DOMContentLoaded', function () {

@@ -1,3 +1,4 @@
 .idea
 app/lib
 app/inc/config.inc
+app/config.inc

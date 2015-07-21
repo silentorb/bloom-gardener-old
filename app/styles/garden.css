@@ -145,3 +145,9 @@ content {
 .bloom-button-list button {
     margin-right: 10px;
 }
+
+textarea {
+    width: 450px;
+    resize: none;
+    height: 500px;
+}

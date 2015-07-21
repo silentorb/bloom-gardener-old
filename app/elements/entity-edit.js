@@ -6,10 +6,13 @@
                 var trellis = args.trellis, seed = args.seed;
                 var properties = Traveler.filter(trellis.properties, property_filter);
                 var title = '<a href="?trellis=' + trellis.name + '">' + trellis.name + '</a>' + ' ' + seed[trellis.primary_key];
-                if (trellis.properties.name && seed.name) {
+                if (trellis.properties.name && seed.name && trellis.primary_key != 'name') {
                     title += ' ' + seed.name;
                 }
                 elements.title.innerHTML = title;
+                var view = Garden.views[trellis.name] || {
+                    properties: {}
+                };
                 var fields = {};
                 for (var i in properties) {
                     if (i == trellis.primary_key)
@@ -19,7 +22,7 @@
                     label.innerHTML = i;
                     wrapper.appendChild(label);
                     elements.fields.appendChild(wrapper);
-                    var field = create_field(i, trellis.properties[i], seed);
+                    var field = create_field(i, trellis.properties[i], seed, view.properties[i]);
                     wrapper.appendChild(field.element);
                     fields[i] = field;
                 }
@@ -45,9 +48,14 @@
         date: create_date_field,
         float: create_number_field,
         int: create_int_field,
-        string: create_string_field
+        string: create_string_field,
+        text: create_text_field
     };
-    function create_field(name, property, seed) {
+    function create_field(name, property, seed, view) {
+        if (view && view.vine) {
+            var vine = Garden.vines[view.vine.name];
+            return vine.create(property, seed[name]);
+        }
         if (methods[property.type]) {
             return methods[property.type](name, property, seed);
         }
@@ -55,12 +63,23 @@
     }
     function create_standard_field(tag, type, name) {
         var field = document.createElement(tag);
-        field.type = type;
+        if (type)
+            field.type = type;
         field.setAttribute('name', name);
         return field;
     }
     function create_string_field(name, property, seed) {
         var field = create_standard_field('input', 'text', name);
+        field.value = seed[name];
+        return {
+            element: field,
+            get_value: function () {
+                return field.value;
+            }
+        };
+    }
+    function create_text_field(name, property, seed) {
+        var field = create_standard_field('textarea', null, name);
         field.value = seed[name];
         return {
             element: field,

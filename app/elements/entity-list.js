@@ -7,7 +7,7 @@
                 var trellis = args.trellis;
                 elements.title.innerHTML = trellis.name;
                 var properties = Vineyard.Trellis.prepare_properties(trellis);
-                this.flowers.table.inputs.header.set_value(properties);
+                this.flowers.table.inputs.header.set_value(properties.map(function (p) { return p.name; }));
                 //populate_row(elements.header, properties, function(property, i) {
                 //  return i
                 //})
@@ -69,7 +69,7 @@
         }
     });
     function format_property_value(seed, property, i) {
-        var value = seed[i];
+        var value = seed[property.name];
         if (value) {
             if (property.type == 'text') {
                 value = value.substr(0, 50);

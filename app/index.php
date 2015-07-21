@@ -22,6 +22,9 @@
   <script src="elements/entity-edit.js"></script>
 
   <link rel="stylesheet" href="styles/garden.css">
+
+  <?php require 'config.inc' ?>
+
 </head>
 <body>
   <header>Garden</header>

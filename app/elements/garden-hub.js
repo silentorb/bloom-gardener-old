@@ -13,7 +13,7 @@
         },
         "garden-hub": {
             initialize: function (elements, args) {
-                Wind.vineyard.get('vineyard/schema').then(function (response) {
+                Wind.vineyard.post('vineyard/gardener/schema', {}).then(function (response) {
                     console.log(response);
                     var trellises = response.data.objects.sort(Graft.sort('name')).map(prepare_trellis);
                     var list = elements.trellises;

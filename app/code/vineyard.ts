@@ -8,13 +8,12 @@ module Vineyard {
     }
 
     export function prepare_properties(trellis) {
-      var properties = Traveler.map_to_array(trellis.properties, function (p, i) {
+      return Traveler.map_to_array(trellis.properties, function (p, i) {
         p.name = i
         return p
       })
         .filter(property_filter)
         .sort(create_property_sort(trellis))
-
     }
 
     function property_filter(property) {
