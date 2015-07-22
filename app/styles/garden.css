@@ -149,7 +149,7 @@ content {
     padding:15px;
     background: rgb(255, 255, 250);
     border-radius: 7px;
-    border: rgba(202, 246, 202, 0.53) solid 2px;
+    border: rgba(54, 154, 54, 1) solid 2px;
     margin-left:15px;
 }
 
@@ -158,7 +158,7 @@ content {
 }
 
 .edit-form {
-    padding: 20px;
+    /*padding: 20px;*/
 }
 
 .bloom-button-list {
@@ -174,4 +174,8 @@ textarea {
     resize: none;
     height: 200px;
     /*height: 500px;*/
+}
+
+h2:first-child {
+    margin-top: 0;
 }
