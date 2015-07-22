@@ -27,7 +27,9 @@
 
 </head>
 <body>
-  <header>Garden</header>
+
+  <header><div class="panel">Garden</div></header>
+
   <page-placeholder></page-placeholder>
   <footer></footer>
 </body>

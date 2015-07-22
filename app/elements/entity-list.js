@@ -84,6 +84,10 @@
         var cells = Traveler.map(list, function (item, i) {
             var cell = document.createElement('bloom-cell');
             cell.innerHTML = mapper(item, i);
+            var top = document.createElement('bloom-cell-top');
+            var bottom = document.createElement('bloom-cell-bottom');
+            cell.insertBefore(top, cell.firstChild);
+            cell.insertBefore(bottom, cell.firstChild);
             return cell;
         });
         Spade.append_list(element, cells);

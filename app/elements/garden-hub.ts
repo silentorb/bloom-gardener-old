@@ -93,6 +93,7 @@ declare var Traveler:any
           }
           args[trellis.primary_key] = seed[trellis.primary_key]
           Spade.set_query_arguments(args)
+          window.scrollTo(0, 0)
         }
       }
     }
