@@ -1,8 +1,8 @@
-/// <reference path="metahub.ts"/>
+/// <reference path="traveler.ts"/>
 
 module Graft {
 
-  export class Element_List_Input implements MetaHub.Input<Node> {
+  export class Element_List_Input implements Traveler.Input<Node> {
     element
     source
 
@@ -18,7 +18,7 @@ module Graft {
     }
   }
 
-  export class Element_Input implements MetaHub.Input<Node> {
+  export class Element_Input implements Traveler.Input<Node> {
     element
     source
 

@@ -1,5 +1,6 @@
 /// <reference path="../code/garden.ts"/>
 /// <reference path="../code/vineyard.ts"/>
+/// <reference path="../code/irrigation.ts"/>
 (function () {
     var bulbs = {
         "trellis-link": {
@@ -17,9 +18,9 @@
                     console.log(response);
                     var trellises = response.data.objects.sort(Graft.sort('name')).map(prepare_trellis);
                     var list = elements.trellises;
-                    MetaHub.sequence([
-                        new MetaHub.Variable(trellises),
-                        new MetaHub.List_Map(function (item, name) {
+                    Traveler.sequence([
+                        new Traveler.Variable(trellises),
+                        new Traveler.List_Map(function (item, name) {
                             var link = Bloom.create_flower('trellis-link', {
                                 trellis: item
                             });
@@ -60,17 +61,17 @@
                         }
                     }
                 });
-                var content = new MetaHub.Variable(null);
-                MetaHub.sequence([
+                var content = new Traveler.Variable(null);
+                Traveler.sequence([
                     content,
-                    new MetaHub.Map(function (page) {
+                    new Traveler.Map(function (page) {
                         return page ? page.element : null;
                     }),
                     new Graft.Element_Input(elements.content_placeholder)
                 ]);
                 goto_trellis = function (trellis) {
                     content.set_value(Bloom.create_flower('entity-list', { trellis: trellis }));
-                    Spade.set_query_arguments({ trellis: trellis.name });
+                    Irrigation.set_query_arguments({ trellis: trellis.name });
                 };
                 goto_entity = function (trellis, seed) {
                     content.set_value(Bloom.create_flower('entity-edit', { trellis: trellis, seed: seed }));
@@ -78,7 +79,7 @@
                         trellis: trellis.name
                     };
                     args[trellis.primary_key] = seed[trellis.primary_key];
-                    Spade.set_query_arguments(args);
+                    Irrigation.set_query_arguments(args);
                     window.scrollTo(0, 0);
                 };
             }

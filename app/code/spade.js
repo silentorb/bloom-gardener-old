@@ -32,13 +32,4 @@ var Spade;
         }
     }
     Spade.append_list = append_list;
-    function set_query_arguments(args) {
-        var arg_strings = Traveler.map_to_array(args, function (arg, i) {
-            return i + '=' + arg;
-        });
-        var query = arg_strings.length > 0 ? '?' + arg_strings.join('&') : '';
-        var url = window.location.protocol + "//" + window.location.host + window.location.pathname + query;
-        history.pushState({}, '', url);
-    }
-    Spade.set_query_arguments = set_query_arguments;
 })(Spade || (Spade = {}));

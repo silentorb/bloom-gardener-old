@@ -13,10 +13,10 @@ var Garden;
         var server = this.config.servers[0];
         this.views = server.views || {};
         var placeholder = document.getElementsByTagName('page-placeholder')[0];
-        change_page = new MetaHub.Variable(null);
-        MetaHub.sequence([
+        change_page = new Traveler.Variable(null);
+        Traveler.sequence([
             change_page,
-            new MetaHub.Map(function (page) { return page ? page.element : null; }),
+            new Traveler.Map(function (page) { return page ? page.element : null; }),
             new Graft.Element_Input(placeholder)
         ]);
         Wind.vineyard.query({

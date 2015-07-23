@@ -1,4 +1,4 @@
-module MetaHub {
+module Traveler {
 
   export interface Output<T> {
     get_value():T
@@ -34,7 +34,7 @@ module MetaHub {
 
   export function sequence(list) {
     for (var i = 0; i < list.length - 1; ++i) {
-      MetaHub.connect(list[i], list[i + 1])
+      Traveler.connect(list[i], list[i + 1])
     }
   }
 
@@ -48,7 +48,7 @@ module MetaHub {
     }
 
     set_value(value) {
-      MetaHub.changed(this, this.mapper(value))
+      Traveler.changed(this, this.mapper(value))
     }
 
     get_value() {
@@ -68,7 +68,7 @@ module MetaHub {
     }
 
     set_value(value) {
-      MetaHub.changed(this, this.map(value))
+      Traveler.changed(this, this.map(value))
     }
 
     get_value() {
@@ -101,7 +101,7 @@ module MetaHub {
         return
 
       this.value = value
-      MetaHub.changed(this, value)
+      Traveler.changed(this, value)
     }
   }
 }

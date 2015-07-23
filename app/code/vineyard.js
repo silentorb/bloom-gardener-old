@@ -7,7 +7,7 @@ var Vineyard;
         }
         Trellis.get_identity = get_identity;
         function prepare_properties(trellis) {
-            return Traveler.map_to_array(trellis.properties, function (p, i) {
+            return Functional.map_to_array(trellis.properties, function (p, i) {
                 p.name = i;
                 return p;
             }).filter(property_filter).sort(create_property_sort(trellis));

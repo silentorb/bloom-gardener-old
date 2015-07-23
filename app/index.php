@@ -4,10 +4,11 @@
   <meta charset="UTF-8">
   <title>Garden</title>
 
-  <script src="code/metahub.js"></script>
+  <script src="code/functional.js"></script>
   <script src="code/vineyard.js"></script>
   <script src="code/traveler.js"></script>
   <script src="code/spade.js"></script>
+  <script src="code/irrigation.js"></script>
   <script src="code/wind.js"></script>
   <script src="code/graft.js"></script>
 
@@ -23,7 +24,7 @@
 
   <link rel="stylesheet" href="styles/garden.css">
 
-  <?php require 'config.inc' ?>
+  <?php require 'config.inc'; ?>
 
 </head>
 <body>

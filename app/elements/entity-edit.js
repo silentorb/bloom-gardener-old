@@ -4,7 +4,7 @@
         "entity-edit": {
             initialize: function (elements, args) {
                 var trellis = args.trellis, seed = args.seed;
-                var properties = Traveler.filter(trellis.properties, property_filter);
+                var properties = Functional.filter(trellis.properties, property_filter);
                 var title = '<a href="?trellis=' + trellis.name + '">' + trellis.name + '</a>' + ' ' + seed[trellis.primary_key];
                 if (trellis.properties.name && seed.name && trellis.primary_key != 'name') {
                     title += ' ' + seed.name;
@@ -138,7 +138,7 @@
         return property.type != 'list' && property.type != 'reference';
     }
     function save(trellis, original, fields) {
-        var modified = Traveler.map(fields, function (field) {
+        var modified = Functional.map(fields, function (field) {
             return field.get_value();
         });
         var seed = {

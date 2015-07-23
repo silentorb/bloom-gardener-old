@@ -1,7 +1,8 @@
 /// <reference path="../code/garden.ts"/>
 /// <reference path="../code/vineyard.ts"/>
+/// <reference path="../code/irrigation.ts"/>
 
-declare var Traveler:any
+declare var Functional:any
 
 (function () {
   var bulbs = {
@@ -24,9 +25,9 @@ declare var Traveler:any
             var trellises = response.data.objects.sort(Graft.sort('name')).map(prepare_trellis)
             var list = elements.trellises
 
-            MetaHub.sequence([
-              new MetaHub.Variable<any[]>(trellises),
-              new MetaHub.List_Map(function (item, name) {
+            Traveler.sequence([
+              new Traveler.Variable<any[]>(trellises),
+              new Traveler.List_Map(function (item, name) {
                 var link = Bloom.create_flower('trellis-link', {
                   trellis: item
                   //,
@@ -72,10 +73,10 @@ declare var Traveler:any
             }
           })
 
-        var content = new MetaHub.Variable<Node>(null)
-        MetaHub.sequence([
+        var content = new Traveler.Variable<Node>(null)
+        Traveler.sequence([
           content,
-          new MetaHub.Map(function (page) {
+          new Traveler.Map(function (page) {
             return page ? page.element : null
           }),
           new Graft.Element_Input(elements.content_placeholder)
@@ -83,7 +84,7 @@ declare var Traveler:any
 
         goto_trellis = function (trellis) {
           content.set_value(Bloom.create_flower('entity-list', {trellis: trellis}))
-          Spade.set_query_arguments({trellis: trellis.name})
+          Irrigation.set_query_arguments({trellis: trellis.name})
         }
 
         goto_entity = function (trellis, seed) {
@@ -92,7 +93,7 @@ declare var Traveler:any
             trellis: trellis.name
           }
           args[trellis.primary_key] = seed[trellis.primary_key]
-          Spade.set_query_arguments(args)
+          Irrigation.set_query_arguments(args)
           window.scrollTo(0, 0)
         }
       }

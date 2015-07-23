@@ -15,9 +15,9 @@
                     "trellis": trellis.name,
                     "version": "1.0.0.browser"
                 }).then(function (response) {
-                    MetaHub.sequence([
-                        new MetaHub.Variable(response.objects),
-                        new MetaHub.List_Map(function (item, name) {
+                    Traveler.sequence([
+                        new Traveler.Variable(response.objects),
+                        new Traveler.List_Map(function (item, name) {
                             var link = Bloom.create_flower('entity-row', {
                                 seed: item,
                                 trellis: trellis
@@ -54,11 +54,11 @@
             //},
             initialize: function (elements, args) {
                 this.inputs = {
-                    header: new MetaHub.Variable(null)
+                    header: new Traveler.Variable(null)
                 };
-                MetaHub.sequence([
+                Traveler.sequence([
                     this.inputs.header,
-                    new MetaHub.List_Map(function (item) {
+                    new Traveler.List_Map(function (item) {
                         var cell = document.createElement('bloom-cell');
                         cell.innerHTML = item;
                         return cell;
@@ -81,13 +81,13 @@
         return value;
     }
     function populate_row(element, list, mapper) {
-        var cells = Traveler.map(list, function (item, i) {
+        var cells = Functional.map(list, function (item, i) {
             var cell = document.createElement('bloom-cell');
             cell.innerHTML = mapper(item, i);
-            var top = document.createElement('bloom-cell-top');
-            var bottom = document.createElement('bloom-cell-bottom');
-            cell.insertBefore(top, cell.firstChild);
-            cell.insertBefore(bottom, cell.firstChild);
+            //var top = document.createElement('bloom-cell-top')
+            //var bottom = document.createElement('bloom-cell-bottom')
+            //cell.insertBefore(top, cell.firstChild)
+            //cell.insertBefore(bottom, cell.firstChild)
             return cell;
         });
         Spade.append_list(element, cells);

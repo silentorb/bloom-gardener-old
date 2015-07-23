@@ -103,7 +103,7 @@ module Bulb_Loader {
     //if (data.inputs) {
     //  for (var j in data.inputs) {
     //    var input_info = data.inputs[j]
-    //    new MetaHub.Variable<any>(null)
+    //    new Traveler.Variable<any>(null)
     //  }
     //}
 

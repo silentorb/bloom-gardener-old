@@ -1,4 +1,4 @@
-declare var Traveler
+declare var Functional
 
 module Vineyard {
 
@@ -8,7 +8,7 @@ module Vineyard {
     }
 
     export function prepare_properties(trellis) {
-      return Traveler.map_to_array(trellis.properties, function (p, i) {
+      return Functional.map_to_array(trellis.properties, function (p, i) {
         p.name = i
         return p
       })

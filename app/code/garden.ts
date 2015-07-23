@@ -24,7 +24,7 @@ module Garden {
     vine
   }
 
-  var change_page:MetaHub.Variable<Node>
+  var change_page:Traveler.Variable<Node>
   var config:Config
 
   export var vines = []
@@ -36,10 +36,10 @@ module Garden {
     this.views = server.views || {}
 
     var placeholder = document.getElementsByTagName('page-placeholder')[0]
-    change_page = new MetaHub.Variable<Node>(null)
-    MetaHub.sequence([
+    change_page = new Traveler.Variable<Node>(null)
+    Traveler.sequence([
       change_page,
-      new MetaHub.Map((page) => page ? page.element : null),
+      new Traveler.Map((page) => page ? page.element : null),
       new Graft.Element_Input(placeholder)
     ])
 
